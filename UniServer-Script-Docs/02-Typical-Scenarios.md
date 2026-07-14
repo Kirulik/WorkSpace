@@ -1,6 +1,6 @@
-# Cookbook: типовые сценарии скриптов UniServer
+# Типовые сценарии скриптов UniServer
 
-Краткие рецепты. Полные сигнатуры — в [01-Script-API-Reference.md](01-Script-API-Reference.md).
+Краткие примеры типовых задач. Полные сигнатуры функций — в [01-Script-API-Reference.md](01-Script-API-Reference.md).
 
 ---
 
@@ -58,14 +58,14 @@ var
   i: Integer;
   LName: String;
 begin
-  LData := _Json(Request.InputStr('')); // или как отдаёт ваш фронт
+  LData := _Json(Request.InputStr('')); // или как отдаёт фронтенд
   // Часто удобнее явный список полей:
   SetVarValue('Result_FULL_NUMB_TS', Request.InputStr('Result_FULL_NUMB_TS'));
   Response.ReturnText('OK', 'text/plain', 200);
 end
 ```
 
-(Точный способ чтения тела зависит от того, как страница объявлена и что шлёт jQuery/`fetch`.)
+(Точный способ чтения тела зависит от того, как страница объявлена и что передаёт клиент.)
 
 ---
 
@@ -204,7 +204,7 @@ massa := SetFormatRoundFromDiscret(RawMassa, 2, 0.02);
 
 ---
 
-## Чек-лист отладки
+## Контрольный список отладки
 
 1. `DebugLog(...)` — смотреть лог UniServer.  
 2. Кнопка **Компилировать** в SMC — ловит синтаксис до сохранения.  
