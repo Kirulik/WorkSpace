@@ -72,7 +72,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="secondsbetween"></a>
 ### `SecondsBetween`
 
-*** `SecondsBetween` — Элемент скриптового API ****
+*** `SecondsBetween` — Разница в секундах ****
 
 `function SecondsBetween(Now, Then: TDateTime): Integer`
 
@@ -84,13 +84,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Количество секунд между двумя датами.
 
 **Пример вызова:**
 
@@ -103,14 +99,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="millisecondsbetween"></a>
 ### `MillisecondsBetween`
 
-*** `MillisecondsBetween` — Элемент скриптового API ****
+*** `MillisecondsBetween` — Разница в миллисекундах ****
 
 `function MillisecondsBetween(Now, Then: TDateTime): Integer`
 
@@ -122,13 +118,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Количество миллисекунд между двумя датами.
 
 **Пример вызова:**
 
@@ -141,14 +133,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="minutesbetween"></a>
 ### `MinutesBetween`
 
-*** `MinutesBetween` — Элемент скриптового API ****
+*** `MinutesBetween` — Разница в минутах ****
 
 `function MinutesBetween(Now, Then: TDateTime): Integer`
 
@@ -160,13 +152,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Количество минут между двумя датами.
 
 **Пример вызова:**
 
@@ -179,14 +167,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hoursbetween"></a>
 ### `HoursBetween`
 
-*** `HoursBetween` — Элемент скриптового API ****
+*** `HoursBetween` — Разница в часах ****
 
 `function HoursBetween(Now, Then: TDateTime): Integer`
 
@@ -198,13 +186,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Количество часов между двумя датами.
 
 **Пример вызова:**
 
@@ -217,14 +201,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="nowprecise"></a>
 ### `NowPrecise`
 
-*** `NowPrecise` — Элемент скриптового API ****
+*** `NowPrecise` — Текущее локальное время ****
 
 `function NowPrecise: TDateTime`
 
@@ -235,13 +219,9 @@ _Параметры отсутствуют._
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает текущее локальное время с высокой точностью.
 
 **Пример вызова:**
 
@@ -251,14 +231,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="nowutcprecise"></a>
 ### `NowUTCPrecise`
 
-*** `NowUTCPrecise` — Элемент скриптового API ****
+*** `NowUTCPrecise` — Текущее время UTC ****
 
 `function NowUTCPrecise: TDateTime`
 
@@ -269,13 +249,9 @@ _Параметры отсутствуют._
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает текущее время UTC с высокой точностью.
 
 **Пример вызова:**
 
@@ -285,14 +261,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="inchour"></a>
 ### `IncHour`
 
-*** `IncHour` — Элемент скриптового API ****
+*** `IncHour` — Увеличение часов ****
 
 `function IncHour(const Value: TDateTime; const NumberOfHours: Integer): TDateTime`
 
@@ -304,13 +280,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Сдвигает `TDateTime` на заданное число часов.
 
 **Пример вызова:**
 
@@ -320,14 +292,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="incday"></a>
 ### `IncDay`
 
-*** `IncDay` — Элемент скриптового API ****
+*** `IncDay` — Увеличение дней ****
 
 `function IncDay(const Value: TDateTime; const NumberOfDays: Integer): TDateTime`
 
@@ -339,13 +311,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Сдвигает `TDateTime` на заданное число дней.
 
 **Пример вызова:**
 
@@ -355,7 +323,7 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
@@ -455,7 +423,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="ticksperiodtotext"></a>
 ### `TicksPeriodToText`
 
-*** `TicksPeriodToText` — Элемент скриптового API ****
+*** `TicksPeriodToText` — Период тиков в текст ****
 
 `function TicksPeriodToText(const ATicks: Integer): String`
 
@@ -466,13 +434,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует период в тиках в текстовое представление.
 
 **Пример вызова:**
 
@@ -482,6 +446,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---

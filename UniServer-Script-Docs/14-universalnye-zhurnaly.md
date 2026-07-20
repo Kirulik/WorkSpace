@@ -67,7 +67,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="getrecord"></a>
 ### `GetRecord`
 
-*** `GetRecord` — Элемент скриптового API ****
+*** `GetRecord` — Чтение записи журнала ****
 
 `function GetRecord(Journal, Code: String): Variant`
 
@@ -79,13 +79,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Получает запись по идентификатору `Code`.
 
 **Пример вызова:**
 
@@ -98,7 +94,7 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
@@ -225,7 +221,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="getview"></a>
 ### `GetView`
 
-*** `GetView` — Элемент скриптового API ****
+*** `GetView` — Данные представления ****
 
 `function GetView(Journal, Name: String; Params, Filter: Variant; SortField: String; SortDesc: Boolean; FirstRow, MaxRows: Integer): Variant`
 
@@ -243,13 +239,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Получает данные именованного представления журнала.
 
 **Пример вызова:**
 
@@ -262,14 +254,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="execproc"></a>
 ### `ExecProc`
 
-*** `ExecProc` — Элемент скриптового API ****
+*** `ExecProc` — Хранимая процедура журнала ****
 
 `function ExecProc(Journal, Name: String; Args: Variant): Variant`
 
@@ -282,13 +274,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Выполняет хранимую процедуру журнала.
 
 **Пример вызова:**
 
@@ -301,14 +289,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="getblobs"></a>
 ### `GetBlobs`
 
-*** `GetBlobs` — Элемент скриптового API ****
+*** `GetBlobs` — Список вложений записи ****
 
 `function GetBlobs(Journal, Code: String): Variant`
 
@@ -320,13 +308,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает вложения (blob) записи журнала.
 
 **Пример вызова:**
 
@@ -339,14 +323,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="getblob"></a>
 ### `GetBlob`
 
-*** `GetBlob` — Элемент скриптового API ****
+*** `GetBlob` — Чтение вложения ****
 
 `function GetBlob(Journal, Code, Name: String): Variant`
 
@@ -359,13 +343,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Читает именованное вложение записи.
 
 **Пример вызова:**
 
@@ -378,14 +358,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="setblob"></a>
 ### `SetBlob`
 
-*** `SetBlob` — Элемент скриптового API ****
+*** `SetBlob` — Запись вложения ****
 
 `procedure SetBlob(Journal, Code, Name: String; Blob: Variant)`
 
@@ -401,9 +381,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Сохраняет именованное вложение записи.
 
 **Пример вызова:**
 
@@ -414,14 +392,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="setlink"></a>
 ### `SetLink`
 
-*** `SetLink` — Элемент скриптового API ****
+*** `SetLink` — Создание связи ****
 
 `function SetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
 
@@ -438,13 +416,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Создаёт связь записи с другой записью/журналом.
 
 **Пример вызова:**
 
@@ -457,14 +431,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="setlinknt"></a>
 ### `SetLinkNT`
 
-*** `SetLinkNT` — Элемент скриптового API ****
+*** `SetLinkNT` — Создание связи без триггеров ****
 
 `function SetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
 
@@ -481,13 +455,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Создаёт связь без запуска триггеров.
 
 **Пример вызова:**
 
@@ -500,14 +470,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="getlink"></a>
 ### `GetLink`
 
-*** `GetLink` — Элемент скриптового API ****
+*** `GetLink` — Чтение связи ****
 
 `function GetLink(Journal, Code, Name: String): Variant`
 
@@ -520,13 +490,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает данные связи по имени.
 
 **Пример вызова:**
 
@@ -539,14 +505,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="getlink-link"></a>
 ### `GetLink_Link`
 
-*** `GetLink_Link` — Элемент скриптового API ****
+*** `GetLink_Link` — Идентификатор связанной записи ****
 
 `function GetLink_Link(Journal, Code, Name: String): String`
 
@@ -559,13 +525,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает строковый идентификатор связи.
 
 **Пример вызова:**
 
@@ -578,14 +540,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="getlinks"></a>
 ### `GetLinks`
 
-*** `GetLinks` — Элемент скриптового API ****
+*** `GetLinks` — Список связей ****
 
 `function GetLinks(Journal, Code: String; MaxRows: Integer): Variant`
 
@@ -598,13 +560,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает связи записи.
 
 **Пример вызова:**
 
@@ -617,14 +575,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="deletelinks"></a>
 ### `DeleteLinks`
 
-*** `DeleteLinks` — Элемент скриптового API ****
+*** `DeleteLinks` — Удаление связей ****
 
 `procedure DeleteLinks(Journal, Code, Link: String)`
 
@@ -639,9 +597,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Удаляет связи записи.
 
 **Пример вызова:**
 
@@ -652,14 +608,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="undeletelinks"></a>
 ### `UnDeleteLinks`
 
-*** `UnDeleteLinks` — Элемент скриптового API ****
+*** `UnDeleteLinks` — Восстановление связей ****
 
 `procedure UnDeleteLinks(Journal, Code, Link: String)`
 
@@ -674,9 +630,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Восстанавливает удалённые связи.
 
 **Пример вызова:**
 
@@ -687,14 +641,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="deletelinksnt"></a>
 ### `DeleteLinksNT`
 
-*** `DeleteLinksNT` — Элемент скриптового API ****
+*** `DeleteLinksNT` — Удаление связей без триггеров ****
 
 `procedure DeleteLinksNT(Journal, Code, Link: String)`
 
@@ -709,9 +663,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Удаляет связи без запуска триггеров.
 
 **Пример вызова:**
 
@@ -722,14 +674,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="undeletelinksnt"></a>
 ### `UnDeleteLinksNT`
 
-*** `UnDeleteLinksNT` — Элемент скриптового API ****
+*** `UnDeleteLinksNT` — Восстановление связей без триггеров ****
 
 `procedure UnDeleteLinksNT(Journal, Code, Link: String)`
 
@@ -744,9 +696,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Восстанавливает связи без запуска триггеров.
 
 **Пример вызова:**
 
@@ -757,14 +707,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="asyncsetrecord"></a>
 ### `AsyncSetRecord`
 
-*** `AsyncSetRecord` — Элемент скриптового API ****
+*** `AsyncSetRecord` — Асинхронное сохранение записи ****
 
 `procedure AsyncSetRecord(Journal: String; Doc: Variant)`
 
@@ -778,9 +728,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Ставит сохранение записи в очередь сообщений.
 
 **Пример вызова:**
 
@@ -791,14 +739,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="asyncsetrecordnt"></a>
 ### `AsyncSetRecordNT`
 
-*** `AsyncSetRecordNT` — Элемент скриптового API ****
+*** `AsyncSetRecordNT` — Асинхронное сохранение без триггеров ****
 
 `procedure AsyncSetRecordNT(Journal: String; Doc: Variant)`
 
@@ -812,9 +760,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Асинхронное сохранение без запуска триггеров.
 
 **Пример вызова:**
 
@@ -825,14 +771,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="asyncexecproc"></a>
 ### `AsyncExecProc`
 
-*** `AsyncExecProc` — Элемент скриптового API ****
+*** `AsyncExecProc` — Асинхронный вызов процедуры ****
 
 `procedure AsyncExecProc(Journal, Name: String; Args: Variant)`
 
@@ -847,9 +793,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Ставит выполнение хранимой процедуры в очередь.
 
 **Пример вызова:**
 
@@ -860,14 +804,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="asyncsetlink"></a>
 ### `AsyncSetLink`
 
-*** `AsyncSetLink` — Элемент скриптового API ****
+*** `AsyncSetLink` — Асинхронное создание связи ****
 
 `procedure AsyncSetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
 
@@ -886,9 +830,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Ставит создание связи в очередь сообщений.
 
 **Пример вызова:**
 
@@ -899,14 +841,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="asyncsetlinknt"></a>
 ### `AsyncSetLinkNT`
 
-*** `AsyncSetLinkNT` — Элемент скриптового API ****
+*** `AsyncSetLinkNT` — Асинхронная связь без триггеров ****
 
 `procedure AsyncSetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
 
@@ -925,9 +867,7 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Асинхронное создание связи без триггеров.
 
 **Пример вызова:**
 
@@ -938,6 +878,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 ---

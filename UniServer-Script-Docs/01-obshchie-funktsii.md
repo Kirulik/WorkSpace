@@ -77,7 +77,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="newpackedguid"></a>
 ### `NewPackedGuid`
 
-*** `NewPackedGuid` — Элемент скриптового API ****
+*** `NewPackedGuid` — Создание packed GUID ****
 
 `function NewPackedGuid: String`
 
@@ -88,13 +88,9 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Генерирует компактный идентификатор GUID.
 
 **Пример вызова:**
 
@@ -107,14 +103,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="ispackedguid"></a>
 ### `IsPackedGuid`
 
-*** `IsPackedGuid` — Элемент скриптового API ****
+*** `IsPackedGuid` — Проверка packed GUID ****
 
 `function IsPackedGuid(Guid: String): Boolean`
 
@@ -125,13 +121,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Проверяет, что строка соответствует формату packed GUID.
 
 **Пример вызова:**
 
@@ -144,7 +136,7 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 

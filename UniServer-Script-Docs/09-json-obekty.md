@@ -5,7 +5,7 @@ JSON — основной структурный формат данных в с
 <a id="quotedstrjson"></a>
 ### `QuotedStrJSON`
 
-*** `QuotedStrJSON` — Элемент скриптового API ****
+*** `QuotedStrJSON` — Строка в кавычках JSON ****
 
 `function QuotedStrJSON(S: String): String`
 
@@ -16,13 +16,9 @@ JSON — основной структурный формат данных в с
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Заключает строку в JSON-кавычки.
 
 **Пример вызова:**
 
@@ -32,14 +28,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="escapejson"></a>
 ### `EscapeJSON`
 
-*** `EscapeJSON` — Элемент скриптового API ****
+*** `EscapeJSON` — Экранирование JSON ****
 
 `function EscapeJSON(S: String): String`
 
@@ -50,13 +46,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Экранирует спецсимволы для JSON-строки.
 
 **Пример вызова:**
 
@@ -66,7 +58,7 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 

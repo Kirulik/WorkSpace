@@ -5,7 +5,7 @@
 <a id="tdocvariantkind"></a>
 ### `TDocVariantKind`
 
-*** `TDocVariantKind` — Элемент скриптового API ****
+*** `TDocVariantKind` — Тип JSON-переменной ****
 
 `type TDocVariantKind = (dvUndefined, dvObject, dvArray)`
 
@@ -18,9 +18,7 @@ _Параметры отсутствуют._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Перечисление `dvUndefined` / `dvObject` / `dvArray`.
 
 **Пример вызова:**
 

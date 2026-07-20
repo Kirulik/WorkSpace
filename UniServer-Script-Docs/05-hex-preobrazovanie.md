@@ -125,7 +125,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="doubletohex"></a>
 ### `DoubleToHex`
 
-*** `DoubleToHex` — Элемент скриптового API ****
+*** `DoubleToHex` — Double в hex ****
 
 `function DoubleToHex(Value: Double): String`
 
@@ -136,13 +136,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует `Double` в hex-строку.
 
 **Пример вызова:**
 
@@ -152,14 +148,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="singletohex"></a>
 ### `SingleToHex`
 
-*** `SingleToHex` — Элемент скриптового API ****
+*** `SingleToHex` — Single в hex ****
 
 `function SingleToHex(Value: Single): String`
 
@@ -170,13 +166,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует `Single` в hex-строку.
 
 **Пример вызова:**
 
@@ -186,14 +178,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextobyte"></a>
 ### `HexToByte`
 
-*** `HexToByte` — Элемент скриптового API ****
+*** `HexToByte` — Hex в Byte ****
 
 `function HexToByte(Value: String): byte`
 
@@ -204,13 +196,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `byte` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в `Byte`.
 
 **Пример вызова:**
 
@@ -220,14 +208,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextoword"></a>
 ### `HexToWord`
 
-*** `HexToWord` — Элемент скриптового API ****
+*** `HexToWord` — Hex в Word ****
 
 `function HexToWord(Value: String): Integer`
 
@@ -238,13 +226,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в целое (Word/Integer по RTTI).
 
 **Пример вызова:**
 
@@ -254,14 +238,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextolongword"></a>
 ### `HexToLongWord`
 
-*** `HexToLongWord` — Элемент скриптового API ****
+*** `HexToLongWord` — Hex в LongWord ****
 
 `function HexToLongWord(Value: String): Word`
 
@@ -272,13 +256,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Word` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в LongWord (сигнатура RTTI: Word).
 
 **Пример вызова:**
 
@@ -288,14 +268,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextoint"></a>
 ### `HexToInt`
 
-*** `HexToInt` — Элемент скриптового API ****
+*** `HexToInt` — Hex в Integer ****
 
 `function HexToInt(Value: String): Integer`
 
@@ -306,13 +286,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в `Integer`.
 
 **Пример вызова:**
 
@@ -322,14 +298,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextoint64"></a>
 ### `HexToInt64`
 
-*** `HexToInt64` — Элемент скриптового API ****
+*** `HexToInt64` — Hex в Int64 ****
 
 `function HexToInt64(Value: String): Int64`
 
@@ -340,13 +316,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Int64` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в `Int64`.
 
 **Пример вызова:**
 
@@ -356,14 +328,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextodouble"></a>
 ### `HexToDouble`
 
-*** `HexToDouble` — Элемент скриптового API ****
+*** `HexToDouble` — Hex в Double ****
 
 `function HexToDouble(Value: String): Double`
 
@@ -374,13 +346,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в `Double`.
 
 **Пример вызова:**
 
@@ -390,14 +358,14 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
 <a id="hextosingle"></a>
 ### `HexToSingle`
 
-*** `HexToSingle` — Элемент скриптового API ****
+*** `HexToSingle` — Hex в Single ****
 
 `function HexToSingle(Value: String): Single`
 
@@ -408,13 +376,9 @@ _Источник сведений:_ `Материалы для документ
 
 Значение типа `Single` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Преобразует hex-строку в `Single`.
 
 **Пример вызова:**
 
@@ -424,7 +388,7 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ---
 
