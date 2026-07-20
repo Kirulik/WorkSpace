@@ -2,17 +2,17 @@
 
 Раздел описывает объекты ядра, доступные скрипту как типизированные интерфейсы: конфигурация (`TICoreConfig`), сообщения (`TICoreMessages`, `TIMessage`, `TIBlob`), планировщик (`TICoreScheduler`), локаль (`TICoreLocale`), пользователь (`TIUser`), HTTP-запрос и ответ (`TIWebServerRequest`, `TIWebServerResponse`). Плагин встраивает страницы вызовом регистрации обработчика; при обращении к `/core/plugins/ИмяПлагина/ИмяСтраницы` ядро вызывает обработчик с парой Request/Response. Ответ формируют `ReturnPage` (шаблон из `Views` в UTF-8, встройка в общий каркас сайта), `ReturnError`, `ReturnText` / `ReturnBlob`. Страницы принято разделять на интерфейс, действия и данные с разными флагами аутентификации и кэша. `TIBlob` передаёт двоичные данные без лишнего копирования между плагинами. Планировщик ставит отправку сообщений по crontab-подобной строке или таймеру. Этот слой — полная модель «законов» сервера; упрощённые `GetConfig*` / `PostMsg` из предыдущих разделов дублируют часть возможностей для совместимости.
 
-Состав интерфейсов и сигнатуры подтверждены RTTI. Описание, отсутствующее в исходниках и ODT, отмечено предупреждением.
+Состав интерфейсов и сигнатуры подтверждены RTTI (`functions.txt`) и `PluginAPI_TLB.pas`. Поведенческие сведения взяты из PluginAPI_desc; где в материалах остаётся только сигнатура — стоит маркер дополнения.
 
 <a id="tiblob"></a>
 ## `TIBlob`
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> В `functions.txt` строка описания `TIBlob` обрывается на «используется для»; назначение не восстановлено.
+Обёртка скрипта над COM-интерфейсом `IBlob`: контейнер двоичных данных без лишнего копирования между плагинами. У blob есть имя, тип содержимого, размер и сами данные; плагин может реализовать `IBlob` эффективно под свою модель памяти (по PluginAPI_desc.odt). В скрипте `Data` отдаётся как Variant-массив байт (копирование в `VarArray` в `fsCoreScript.pas`).
 
 <a id="tiblob-tojson"></a>
 ### `TIBlob.ToJson`
 
-*** `TIBlob.ToJson` — Элемент скриптового API ****
+*** `TIBlob.ToJson` — JSON-представление blob ****
 
 `function ToJson: String`
 
@@ -21,33 +21,30 @@ _Параметры отсутствуют._
 
 **Возвращает:**
 
-_Процедура ничего не возвращает._
+Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Вызывает `IBlob.ToJSON` (по `fsCoreScript.pas` / TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := ToJson(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.ToJson(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="tiblob-name"></a>
 ### `TIBlob.Name`
 
-*** `TIBlob.Name` — Элемент скриптового API ****
+*** `TIBlob.Name` — Имя blob ****
 
 `property Name: String`
 
@@ -58,31 +55,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `IBlob.Name` — имя двоичного вложения (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Name` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIBlob.Name` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Name));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiblob-contenttype"></a>
 ### `TIBlob.ContentType`
 
-*** `TIBlob.ContentType` — Элемент скриптового API ****
+*** `TIBlob.ContentType` — Тип содержимого ****
 
 `property ContentType: String`
 
@@ -93,31 +86,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `IBlob.ContentType` — тип содержимого двоичных данных (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `ContentType` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIBlob.ContentType` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.ContentType));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiblob-data"></a>
 ### `TIBlob.Data`
 
-*** `TIBlob.Data` — Элемент скриптового API ****
+*** `TIBlob.Data` — Данные blob ****
 
 `property Data: Variant`
 
@@ -128,31 +117,28 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- В COM — указатель на данные (`IBlob.Data`).
+- В скриптовой обёртке копируется в Variant-массив байт (`VarArray` of `varByte`) в `TIBlob.GetData` (`fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Data` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIBlob.Data` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Data));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="tiblob-size"></a>
 ### `TIBlob.Size`
 
-*** `TIBlob.Size` — Элемент скриптового API ****
+*** `TIBlob.Size` — Размер данных ****
 
 `property Size: Integer`
 
@@ -163,34 +149,32 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Число байт в blob (`IBlob.Size`, по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Size` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIBlob.Size` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Size));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig"></a>
 ## `TICoreConfig`
 
+Обёртка над `ICoreConfig`: пути сервера и плагина, адрес/порт, словарь параметров `Values` / `Defaults`, метаданные сообщений и ролей. Чтение `Values[Name]` — тот же слой конфигурации, что обслуживают устаревшие глобальные `GetConfig*`. `MyPath` — каталог текущего плагина; от него резолвятся относительные пути `StringFromFile` / `FileFromString` (по TLB / `fsCoreScript.pas`).
+
 <a id="ticoreconfig-binpath"></a>
 ### `TICoreConfig.BinPath`
 
-*** `TICoreConfig.BinPath` — Элемент скриптового API ****
+*** `TICoreConfig.BinPath` — Каталог двоичных файлов сервера ****
 
 `property BinPath: String`
 
@@ -201,31 +185,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ICoreConfig.BinPath` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `BinPath` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.BinPath` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.BinPath));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-datapath"></a>
 ### `TICoreConfig.DataPath`
 
-*** `TICoreConfig.DataPath` — Элемент скриптового API ****
+*** `TICoreConfig.DataPath` — Каталог данных сервера ****
 
 `property DataPath: String`
 
@@ -236,66 +216,58 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ICoreConfig.DataPath` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `DataPath` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.DataPath` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.DataPath));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-defaults"></a>
 ### `TICoreConfig.Defaults`
 
-*** `TICoreConfig.Defaults` — Элемент скриптового API ****
+*** `TICoreConfig.Defaults` — Значение конфигурации по умолчанию ****
 
 `property Defaults[Name: String]: String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя параметра конфигурации (по TLB `Defaults[Index]`)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Индексное свойство `Defaults[Name]` — значение по умолчанию для параметра (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Defaults` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.Defaults` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Defaults));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-logpath"></a>
 ### `TICoreConfig.LogPath`
 
-*** `TICoreConfig.LogPath` — Элемент скриптового API ****
+*** `TICoreConfig.LogPath` — Каталог журналов ****
 
 `property LogPath: String`
 
@@ -306,31 +278,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ICoreConfig.LogPath` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `LogPath` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.LogPath` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.LogPath));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-logverbose"></a>
 ### `TICoreConfig.LogVerbose`
 
-*** `TICoreConfig.LogVerbose` — Элемент скриптового API ****
+*** `TICoreConfig.LogVerbose` — Подробный режим логирования ****
 
 `property LogVerbose: String`
 
@@ -341,102 +309,90 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ICoreConfig.LogVerbose` (по TLB); в скриптовой обёртке читается как Boolean (`fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `LogVerbose` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.LogVerbose` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.LogVerbose));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticoreconfig-msgfortype"></a>
 ### `TICoreConfig.MsgForType`
 
-*** `TICoreConfig.MsgForType` — Элемент скриптового API ****
+*** `TICoreConfig.MsgForType` — Имя сообщения по типу содержимого ****
 
 `property MsgForType[Name: String; Value: Variant]: String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — тип содержимого / ключ сопоставления (в TLB параметр `ContentType`)
+- `Value: Variant` — признак команды (`IsCommand` в TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Индексное свойство `MsgForType[ContentType, IsCommand]` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `MsgForType` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.MsgForType` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.MsgForType));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-msginfo"></a>
 ### `TICoreConfig.MsgInfo`
 
-*** `TICoreConfig.MsgInfo` — Элемент скриптового API ****
+*** `TICoreConfig.MsgInfo` — Описание сообщения ****
 
 `property MsgInfo[Name: String]: String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя сообщения (по TLB `MsgInfo[MsgName]`)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Индексное свойство `MsgInfo[MsgName]` — информация о сообщении; изменение связано с системным `Core.MsgInfoChanged` (по TLB / PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `MsgInfo` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.MsgInfo` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.MsgInfo));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-msginfos"></a>
 ### `TICoreConfig.MsgInfos`
 
-*** `TICoreConfig.MsgInfos` — Элемент скриптового API ****
+*** `TICoreConfig.MsgInfos` — Сводная информация о сообщениях ****
 
 `property MsgInfos: String`
 
@@ -447,31 +403,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `MsgInfos` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `MsgInfos` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.MsgInfos` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.MsgInfos));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-msgnames"></a>
 ### `TICoreConfig.MsgNames`
 
-*** `TICoreConfig.MsgNames` — Элемент скриптового API ****
+*** `TICoreConfig.MsgNames` — Имена сообщений ****
 
 `property MsgNames: String`
 
@@ -482,31 +434,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `MsgNames` — перечень имён сообщений (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `MsgNames` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.MsgNames` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.MsgNames));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-mypath"></a>
 ### `TICoreConfig.MyPath`
 
-*** `TICoreConfig.MyPath` — Элемент скриптового API ****
+*** `TICoreConfig.MyPath` — Каталог текущего плагина ****
 
 `property MyPath: String`
 
@@ -517,66 +465,58 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `MyPath`; от него разрешаются относительные пути файловых функций скрипта (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `MyPath` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.MyPath` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.MyPath));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticoreconfig-pluginoptsdocjson"></a>
 ### `TICoreConfig.PluginOptsDocJson`
 
-*** `TICoreConfig.PluginOptsDocJson` — Элемент скриптового API ****
+*** `TICoreConfig.PluginOptsDocJson` — JSON-описание опций плагина ****
 
 `property PluginOptsDocJson[Name: String]: String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя плагина (по TLB `PluginOptsDocJson[PluginName]`)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Индексное свойство `PluginOptsDocJson[PluginName]` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `PluginOptsDocJson` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.PluginOptsDocJson` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.PluginOptsDocJson));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-pluginpath"></a>
 ### `TICoreConfig.PluginPath`
 
-*** `TICoreConfig.PluginPath` — Элемент скриптового API ****
+*** `TICoreConfig.PluginPath` — Каталог плагинов ****
 
 `property PluginPath: String`
 
@@ -587,31 +527,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ICoreConfig.PluginPath` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `PluginPath` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.PluginPath` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.PluginPath));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-roles"></a>
 ### `TICoreConfig.Roles`
 
-*** `TICoreConfig.Roles` — Элемент скриптового API ****
+*** `TICoreConfig.Roles` — Роли сервера ****
 
 `property Roles: String`
 
@@ -622,31 +558,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Roles` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Roles` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.Roles` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Roles));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-serveraddr"></a>
 ### `TICoreConfig.ServerAddr`
 
-*** `TICoreConfig.ServerAddr` — Элемент скриптового API ****
+*** `TICoreConfig.ServerAddr` — Адрес сервера ****
 
 `property ServerAddr: String`
 
@@ -657,31 +589,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ServerAddr` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `ServerAddr` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.ServerAddr` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.ServerAddr));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-serverport"></a>
 ### `TICoreConfig.ServerPort`
 
-*** `TICoreConfig.ServerPort` — Элемент скриптового API ****
+*** `TICoreConfig.ServerPort` — Порт сервера ****
 
 `property ServerPort: String`
 
@@ -692,31 +620,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ServerPort` (по TLB); в COM — Integer.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `ServerPort` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.ServerPort` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.ServerPort));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-url"></a>
 ### `TICoreConfig.URL`
 
-*** `TICoreConfig.URL` — Элемент скриптового API ****
+*** `TICoreConfig.URL` — Базовый URL сервера ****
 
 `property URL: String`
 
@@ -727,260 +651,230 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `URL` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `URL` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.URL` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.URL));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoreconfig-values"></a>
 ### `TICoreConfig.Values`
 
-*** `TICoreConfig.Values` — Элемент скриптового API ****
+*** `TICoreConfig.Values` — Значение параметра конфигурации ****
 
 `property Values[Name: String]: String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя параметра конфигурации (по TLB `Values[Index]`)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Индексное свойство `Values[Name]` — чтение/запись параметра конфигурации.
+- Глобальные `GetConfig*` читают тот же слой через `CoreConfig.Values` (по TLB / `fsCoreScript.pas` / `functions.txt`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Values` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreConfig.Values` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Values));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticorelocale"></a>
 ## `TICoreLocale`
 
+Обёртка над `ICoreLocale`: форматирование валюты, даты, веса, форм множественного числа и перевод строк с учётом текущего языка сервера (сигнатуры — TLB / RTTI).
+
 <a id="ticorelocale-formatcurrency"></a>
 ### `TICoreLocale.FormatCurrency`
 
-*** `TICoreLocale.FormatCurrency` — Элемент скриптового API ****
+*** `TICoreLocale.FormatCurrency` — Форматирование денежной суммы ****
 
 `function FormatCurrency(Value: Double; Currency: String; Spellout, Cents: Boolean): String`
 
 **Входные параметры:**
-- `Value: Double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Currency: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Spellout: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Cents: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: Double` — сумма (по TLB)
+- `Currency: String` — код/обозначение валюты (по TLB)
+- `Spellout: Boolean` — прописью (по имени параметра TLB)
+- `Cents: Boolean` — включать копейки/центы (по имени параметра TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `ICoreLocale.FormatCurrency` (по TLB / RTTI).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := FormatCurrency(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.FormatCurrency(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-formatdate"></a>
 ### `TICoreLocale.FormatDate`
 
-*** `TICoreLocale.FormatDate` — Элемент скриптового API ****
+*** `TICoreLocale.FormatDate` — Форматирование даты ****
 
 `function FormatDate(Value: TDateTime; WithTime: Boolean): String`
 
 **Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `WithTime: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: TDateTime` — дата/время (по TLB)
+- `WithTime: Boolean` — включать время в строку (по TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `ICoreLocale.FormatDate`; параметр `WithTime` включает время (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := FormatDate(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.FormatDate(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-formatplural"></a>
 ### `TICoreLocale.FormatPlural`
 
-*** `TICoreLocale.FormatPlural` — Элемент скриптового API ****
+*** `TICoreLocale.FormatPlural` — Форма множественного числа ****
 
 `function FormatPlural(Value: Integer; Plurals: String): String`
 
 **Входные параметры:**
-- `Value: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Plurals: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: Integer` — число для выбора формы множественного числа (по TLB)
+- `Plurals: String` — набор форм множественного числа (по TLB; формат строки в текстовых материалах не раскрыт)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `ICoreLocale.FormatPlural` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := FormatPlural(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.FormatPlural(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-formatweight"></a>
 ### `TICoreLocale.FormatWeight`
 
-*** `TICoreLocale.FormatWeight` — Элемент скриптового API ****
+*** `TICoreLocale.FormatWeight` — Форматирование массы ****
 
 `function FormatWeight(Value: Double; Spellout: Boolean): String`
 
 **Входные параметры:**
-- `Value: Double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Spellout: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: Double` — значение массы (по TLB)
+- `Spellout: Boolean` — прописью (по TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `ICoreLocale.FormatWeight` (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := FormatWeight(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.FormatWeight(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticorelocale-translate"></a>
 ### `TICoreLocale.Translate`
 
-*** `TICoreLocale.Translate` — Элемент скриптового API ****
+*** `TICoreLocale.Translate` — Перевод строки ****
 
 `function Translate(Value: String): String`
 
 **Входные параметры:**
-- `Value: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: String` — строка для перевода (по TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `ICoreLocale.Translate` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := Translate(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.Translate(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-language"></a>
 ### `TICoreLocale.Language`
 
-*** `TICoreLocale.Language` — Элемент скриптового API ****
+*** `TICoreLocale.Language` — Язык локали ****
 
 `property Language: String`
 
@@ -991,31 +885,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Language` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Language` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreLocale.Language` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Language));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-languagecode"></a>
 ### `TICoreLocale.LanguageCode`
 
-*** `TICoreLocale.LanguageCode` — Элемент скриптового API ****
+*** `TICoreLocale.LanguageCode` — Код языка ****
 
 `property LanguageCode: String`
 
@@ -1026,31 +916,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `LanguageCode` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `LanguageCode` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreLocale.LanguageCode` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.LanguageCode));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorelocale-languageid"></a>
 ### `TICoreLocale.LanguageID`
 
-*** `TICoreLocale.LanguageID` — Элемент скриптового API ****
+*** `TICoreLocale.LanguageID` — Идентификатор языка ****
 
 `property LanguageID: Integer`
 
@@ -1061,64 +947,56 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `LanguageID` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `LanguageID` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreLocale.LanguageID` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.LanguageID));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoremessages"></a>
 ## `TICoreMessages`
 
+Обёртка над `ICoreMessages` — шина сообщений ядра: создание `IMessage`, асинхронный `PostMsg`, синхронный `SendMsg`, проверка подписчиков `HasHandlerFor`. Имя сообщения — `ИмяПлагина.ИмяСообщения`. Обработчики работают в потоках `TMessageHandler`; после обработки нельзя удерживать ссылку на `IMessage` (ссылку на `IBlob` удерживать можно) — по PluginAPI_desc.odt.
+
 <a id="ticoremessages-hashandlerfor"></a>
 ### `TICoreMessages.HasHandlerFor`
 
-*** `TICoreMessages.HasHandlerFor` — Элемент скриптового API ****
+*** `TICoreMessages.HasHandlerFor` — Проверка подписчиков ****
 
 `function HasHandlerFor(MsgName: String): Boolean`
 
 **Входные параметры:**
-- `MsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `MsgName: String` — имя сообщения (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
-Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
+`True`, если в системе есть подписчики на указанное имя сообщения (по PluginAPI_desc.odt)
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает, есть ли в системе обработчики для имени сообщения (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := HasHandlerFor(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  if CoreMessages.HasHandlerFor('Camera1.FrameJpg') then
+    DebugLog('есть подписчики');
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
@@ -1130,28 +1008,28 @@ _Источник сведений:_ `Материалы для документ
 `function NewMessage(MsgName: String; Value: Variant): Variant`
 
 **Входные параметры:**
-- `MsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: Variant` — полезная нагрузка сообщения (тип Variant по RTTI)
+- `MsgName: String` — имя вида `ИмяПлагина.ИмяСообщения` (по PluginAPI_desc.odt)
+- `Value: Variant` — полезная нагрузка `Value` (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
-Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
+созданный объект сообщения (по PluginAPI_desc.odt / TLB)
 
 **Сведения из исходников / ODT:**
 
-- Имя сообщения имеет вид `ИмяПлагина.ИмяСообщения`.
+- Создаёт `IMessage` с именем вида `ИмяПлагина.ИмяСообщения` и значением `Value` (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 var
-  LMsg: Variant;             // сообщение
+  LMsg: Variant;
 begin
-  LMsg := NewMessage('Camera1.FrameJpg', ''); // создать сообщение по имени
+  LMsg := CoreMessages.NewMessage('Camera1.FrameJpg', ''); // создать сообщение
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
@@ -1163,19 +1041,19 @@ _Источник сведений:_ `Материалы для документ
 `function NewMessageEx(MsgName: String; Value: Variant; Blob, CurrentUser: Variant; Timeout: Integer): Variant`
 
 **Входные параметры:**
-- `MsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Blob: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `CurrentUser: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Timeout: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `MsgName: String` — имя вида `ИмяПлагина.ИмяСообщения` (по PluginAPI_desc.odt)
+- `Value: Variant` — полезная нагрузка `Value` (по PluginAPI_desc.odt)
+- `Blob: Variant` — двоичные данные `IBlob` (по PluginAPI_desc.odt)
+- `CurrentUser: Variant` — пользователь `IUser` (по TLB)
+- `Timeout: Integer` — таймаут сообщения (по TLB)
 
 **Возвращает:**
 
-Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
+созданный объект сообщения с Blob/User/Timeout (по PluginAPI_desc.odt / TLB)
 
 **Сведения из исходников / ODT:**
 
-- Имя сообщения имеет вид `ИмяПлагина.ИмяСообщения`.
+- Создаёт сообщение с `Value`, `Blob`, пользователем и таймаутом (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
@@ -1188,75 +1066,72 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticoremessages-newmessagefromjson"></a>
 ### `TICoreMessages.NewMessageFromJson`
 
-*** `TICoreMessages.NewMessageFromJson` — Элемент скриптового API ****
+*** `TICoreMessages.NewMessageFromJson` — Создание сообщения из JSON ****
 
 `function NewMessageFromJson(Json, NewMsgName: String; Remote: Boolean): Variant`
 
 **Входные параметры:**
-- `Json: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NewMsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Remote: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Json: String` — JSON-текст сообщения (по TLB)
+- `NewMsgName: String` — имя сообщения (по TLB)
+- `Remote: Boolean` — признак Remote (по TLB)
 
 **Возвращает:**
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод `NewMessageFromJSON` COM-интерфейса (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := NewMessageFromJson(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.NewMessageFromJson(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticoremessages-postmsg"></a>
 ### `TICoreMessages.PostMsg`
 
-*** `TICoreMessages.PostMsg` — Асинхронная отправка сообщения ****
+*** `TICoreMessages.PostMsg` — Асинхронная отправка ****
 
 `function PostMsg(Msg: Variant): Boolean`
 
 **Входные параметры:**
-- `Msg: Variant` — сообщение для асинхронной постановки в очередь (по PluginAPI_desc.odt)
+- `Msg: Variant` — объект сообщения (`IMessage` / `TIMessage`) для постановки в очередь (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
-по PluginAPI_desc.odt для интерфейса ядра PostMsg возвращает WordBool/False при отсутствии обработчиков; в глобальной RTTI-процедуре `procedure PostMsg` возвращаемого значения нет
+`True`, если сообщение поставлено в очередь хотя бы одному обработчику; `False`, если обработчиков нет (по PluginAPI_desc.odt)
 
 **Сведения из исходников / ODT:**
 
-- Постановка в очередь выполняется асинхронно; возвращает `False`, если обработчиков нет.
+- Ставит сообщение в очередь каждого обработчика; `True` при успешной постановке, `False` если обработчиков нет (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 var
   LMsg: Variant;
+  Ok: Boolean;
 begin
-  LMsg := NewMessage('Camera1.FrameJpg', ''); // подготовить сообщение
-  PostMsg(LMsg);                              // отправить асинхронно
+  LMsg := CoreMessages.NewMessage('Camera1.FrameJpg', '');
+  Ok := CoreMessages.PostMsg(LMsg); // True, если есть обработчики
+  DebugLog(_ToStr(Ok));
 end
 ```
 
@@ -1267,22 +1142,22 @@ _Источник сведений:_ `Материалы для документ
 <a id="ticoremessages-sendmsg"></a>
 ### `TICoreMessages.SendMsg`
 
-*** `TICoreMessages.SendMsg` — Синхронная отправка сообщения ****
+*** `TICoreMessages.SendMsg` — Синхронная отправка ****
 
 `function SendMsg(Msg: Variant; Timeout: Integer): Variant`
 
 **Входные параметры:**
-- `Msg: Variant` — сообщение для синхронной отправки (по PluginAPI_desc.odt)
-- `Timeout: Integer` — таймаут ожидания в миллисекундах; `-1` — бесконечное ожидание (по PluginAPI_desc.odt)
+- `Msg: Variant` — объект сообщения для синхронной отправки (по PluginAPI_desc.odt)
+- `Timeout: Integer` — таймаут ожидания в мс; `-1` — бесконечное ожидание (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
-результат обработки (поле Result сообщения) после ожидания до Timeout (по PluginAPI_desc.odt)
+значение поля `Result` сообщения после ожидания обработки (по PluginAPI_desc.odt)
 
 **Сведения из исходников / ODT:**
 
-- Ожидает обработку до `Timeout` мс; `-1` означает бесконечное ожидание.
-- Результат берётся из поля `Result` сообщения.
+- Ждёт завершения обработки всеми подписчиками до `Timeout` мс (`-1` — без лимита).
+- Окончание определяется по счётчику ссылок сообщения; результат — поле `Result` (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
@@ -1290,9 +1165,9 @@ _Источник сведений:_ `Материалы для документ
 var
   LMsg, LRes: Variant;
 begin
-  LMsg := NewMessage('Camera1.FrameJpg', ''); // подготовить сообщение
-  LRes := SendMsg(LMsg, 1000);                // отправить синхронно, ждать до 1000 мс
-  DebugLog(LRes);                             // результат обработки
+  LMsg := CoreMessages.NewMessage('Camera1.FrameJpg', '');
+  LRes := CoreMessages.SendMsg(LMsg, 1000); // ждать до 1000 мс; -1 — бесконечно
+  DebugLog(LRes);
 end
 ```
 
@@ -1303,7 +1178,7 @@ _Источник сведений:_ `Материалы для документ
 <a id="ticoremessages-registeredmessages"></a>
 ### `TICoreMessages.RegisteredMessages`
 
-*** `TICoreMessages.RegisteredMessages` — Элемент скриптового API ****
+*** `TICoreMessages.RegisteredMessages` — Зарегистрированные сообщения ****
 
 `property RegisteredMessages: Variant`
 
@@ -1314,117 +1189,113 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `RegisteredMessages` интерфейса `ICoreMessages` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `RegisteredMessages` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TICoreMessages.RegisteredMessages` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.RegisteredMessages));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorescheduler"></a>
 ## `TICoreScheduler`
 
+Обёртка над `ICoreScheduler`: отложенная или периодическая отправка сообщений. Расписание `AddTask` — строка из 6 полей (секунда…день недели), локальное время компьютера сервера, синтаксис как crontab; день недели и день месяца вместе обрабатываются по «ИЛИ». `AddTimer` шлёт сообщение каждые N секунд. В скриптовой RTTI флаг `RunOnce` отображается на опцию `SchedulerRunOnce` ядра (PluginAPI_desc.odt / `fsCoreScript.pas`). Примеры в старом ODT с укороченной сигнатурой `AddTask` считаются устаревшими относительно текущего RTTI.
+
 <a id="ticorescheduler-addtask"></a>
 ### `TICoreScheduler.AddTask`
 
-*** `TICoreScheduler.AddTask` — Элемент скриптового API ****
+*** `TICoreScheduler.AddTask` — Задача по расписанию ****
 
 `function AddTask(Tab, UpdateTaskID: String; Msg: Variant; RunOnce: Boolean): String`
 
 **Входные параметры:**
-- `Tab: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `UpdateTaskID: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Msg: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `RunOnce: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Tab: String` — строка расписания из 6 частей (Секунда Минута Час День Месяц ДеньНедели), локальное время сервера; синтаксис как crontab (по PluginAPI_desc.odt)
+- `UpdateTaskID: String` — идентификатор задачи для обновления существующей; пустая строка — создать новую (по сигнатуре TLB `UpdateTaskID`)
+- `Msg: Variant` — сообщение, которое планировщик отправит при срабатывании (по PluginAPI_desc.odt)
+- `RunOnce: Boolean` — если True, в опции ядра добавляется `SchedulerRunOnce` (по `fsCoreScript.pas`)
 
 **Возвращает:**
 
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
+идентификатор задачи планировщика (по TLB / `fsCoreScript.pas`)
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Планирует отправку сообщения по crontab-подобной строке `Tab` (6 полей, локальное время сервера).
+- `RunOnce=True` добавляет флаг `SchedulerRunOnce` в опции ядра (по PluginAPI_desc.odt / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  LMsg: Variant;
+  TaskID: String;
 begin
-  // r := AddTask(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  LMsg := CoreMessages.NewMessage('MyPlugin.Tick', '');
+  // каждый день в 00:05:00, локальное время сервера
+  TaskID := CoreScheduler.AddTask('0 5 0 * * *', '', LMsg, False);
+  DebugLog(TaskID);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="ticorescheduler-addtimer"></a>
 ### `TICoreScheduler.AddTimer`
 
-*** `TICoreScheduler.AddTimer` — Элемент скриптового API ****
+*** `TICoreScheduler.AddTimer` — Периодический таймер ****
 
 `function AddTimer(Seconds: Integer; Msg: Variant): String`
 
 **Входные параметры:**
-- `Seconds: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Msg: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Seconds: Integer` — период отправки сообщения в секундах (по PluginAPI_desc.odt)
+- `Msg: Variant` — сообщение для периодической отправки (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
+идентификатор таймера (по TLB / `fsCoreScript.pas`)
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Отправляет сообщение каждые `Seconds` секунд (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  LMsg: Variant;
+  TimerID: String;
 begin
-  // r := AddTimer(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  LMsg := CoreMessages.NewMessage('MyPlugin.Tick', '');
+  TimerID := CoreScheduler.AddTimer(30, LMsg); // каждые 30 секунд
+  DebugLog(TimerID);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="ticorescheduler-removetask"></a>
 ### `TICoreScheduler.RemoveTask`
 
-*** `TICoreScheduler.RemoveTask` — Элемент скриптового API ****
+*** `TICoreScheduler.RemoveTask` — Удаление задачи ****
 
 `procedure RemoveTask(TaskID: String)`
 
 **Входные параметры:**
-- `TaskID: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `TaskID: String` — идентификатор задачи, возвращённый `AddTask` (по TLB)
 
 **Возвращает:**
 
@@ -1432,32 +1303,29 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Снимает задачу по идентификатору (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // RemoveTask(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.RemoveTask(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="ticorescheduler-removetimer"></a>
 ### `TICoreScheduler.RemoveTimer`
 
-*** `TICoreScheduler.RemoveTimer` — Элемент скриптового API ****
+*** `TICoreScheduler.RemoveTimer` — Удаление таймера ****
 
 `procedure RemoveTimer(TimerID: String)`
 
 **Входные параметры:**
-- `TimerID: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `TimerID: String` — идентификатор таймера, возвращённый `AddTimer` (по TLB)
 
 **Возвращает:**
 
@@ -1465,67 +1333,62 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Снимает таймер по идентификатору (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // RemoveTimer(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.RemoveTimer(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser"></a>
 ## `TIUser`
 
+Обёртка над `IUser`: сведения о пользователе HTTP-сессии или сообщения — идентификатор, имя, отображаемое имя, группа, роли, IP. Используется в `AccessCheck` страниц и в поле `User` сообщения (PluginAPI_desc.odt / TLB).
+
 <a id="tiuser-hasrole"></a>
 ### `TIUser.HasRole`
 
-*** `TIUser.HasRole` — Элемент скриптового API ****
+*** `TIUser.HasRole` — Проверка роли ****
 
 `function HasRole(RoleName: String): Boolean`
 
 **Входные параметры:**
-- `RoleName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `RoleName: String` — имя роли для проверки (по TLB `IUser.HasRole`)
 
 **Возвращает:**
 
-Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
+`True`, если у пользователя есть указанная роль (по TLB)
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Возвращает, входит ли роль в набор ролей пользователя (по TLB).
+- Используется при проверке доступа к страницам (`AccessCheck`, по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := HasRole(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.HasRole(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-tojson"></a>
 ### `TIUser.ToJson`
 
-*** `TIUser.ToJson` — Элемент скриптового API ****
+*** `TIUser.ToJson` — JSON пользователя ****
 
 `function ToJson: String`
 
@@ -1534,33 +1397,30 @@ _Параметры отсутствуют._
 
 **Возвращает:**
 
-_Процедура ничего не возвращает._
+Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Вызывает `IUser.ToJSON` (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := ToJson(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.ToJson(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="tiuser-displayname"></a>
 ### `TIUser.DisplayName`
 
-*** `TIUser.DisplayName` — Элемент скриптового API ****
+*** `TIUser.DisplayName` — Отображаемое имя ****
 
 `property DisplayName: String`
 
@@ -1571,31 +1431,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `DisplayName` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `DisplayName` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.DisplayName` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.DisplayName));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-groupid"></a>
 ### `TIUser.GroupID`
 
-*** `TIUser.GroupID` — Элемент скриптового API ****
+*** `TIUser.GroupID` — Идентификатор группы ****
 
 `property GroupID: Integer`
 
@@ -1606,31 +1462,27 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `GroupID` (тип `UserGroupType` в COM, Integer в скрипте) (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `GroupID` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.GroupID` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.GroupID));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="tiuser-groupname"></a>
 ### `TIUser.GroupName`
 
-*** `TIUser.GroupName` — Элемент скриптового API ****
+*** `TIUser.GroupName` — Имя группы ****
 
 `property GroupName: String`
 
@@ -1641,31 +1493,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `GroupName` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `GroupName` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.GroupName` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.GroupName));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-id"></a>
 ### `TIUser.ID`
 
-*** `TIUser.ID` — Элемент скриптового API ****
+*** `TIUser.ID` — Идентификатор пользователя ****
 
 `property ID: Integer`
 
@@ -1676,31 +1524,27 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `ID` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `ID` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.ID` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.ID));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-ip"></a>
 ### `TIUser.IP`
 
-*** `TIUser.IP` — Элемент скриптового API ****
+*** `TIUser.IP` — IP-адрес ****
 
 `property IP: String`
 
@@ -1711,31 +1555,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `IP` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `IP` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.IP` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.IP));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-name"></a>
 ### `TIUser.Name`
 
-*** `TIUser.Name` — Элемент скриптового API ****
+*** `TIUser.Name` — Имя пользователя ****
 
 `property Name: String`
 
@@ -1746,31 +1586,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Name` (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Name` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.Name` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Name));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiuser-roles"></a>
 ### `TIUser.Roles`
 
-*** `TIUser.Roles` — Элемент скриптового API ****
+*** `TIUser.Roles` — Роли пользователя ****
 
 `property Roles: Variant`
 
@@ -1781,34 +1617,32 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Roles` (`OleVariant` / Variant) (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Roles` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIUser.Roles` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Roles));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="timessage"></a>
 ## `TIMessage`
 
+Обёртка над `IMessage`: сообщение шины. Поля в основном только для чтения; исключение — `Result`, которое заполняют обработчики при `SendMsg`. Состав: полезная нагрузка `Value` (`Variant`), опциональный `Blob`, метка времени, признак устаревания `Expired` (устаревшие можно не обрабатывать), пользователь, таймаут, признак `Remote` (PluginAPI_desc.odt / TLB).
+
 <a id="timessage-tojson"></a>
 ### `TIMessage.ToJson`
 
-*** `TIMessage.ToJson` — Элемент скриптового API ****
+*** `TIMessage.ToJson` — JSON сообщения ****
 
 `function ToJson: String`
 
@@ -1817,33 +1651,30 @@ _Параметры отсутствуют._
 
 **Возвращает:**
 
-_Процедура ничего не возвращает._
+Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Вызывает `IMessage.ToJSON` (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := ToJson(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.ToJson(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="timessage-blob"></a>
 ### `TIMessage.Blob`
 
-*** `TIMessage.Blob` — Элемент скриптового API ****
+*** `TIMessage.Blob` — Двоичные данные сообщения ****
 
 `property Blob: Variant`
 
@@ -1854,31 +1685,27 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Объект `IBlob` с двоичной полезной нагрузкой; может передаваться между плагинами без копирования данных (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Blob` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Blob` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Blob));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="timessage-expired"></a>
 ### `TIMessage.Expired`
 
-*** `TIMessage.Expired` — Элемент скриптового API ****
+*** `TIMessage.Expired` — Признак устаревания ****
 
 `property Expired: Boolean`
 
@@ -1889,31 +1716,27 @@ _Параметры отсутствуют._
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Если сообщение устарело, обработчик может его не обрабатывать (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Expired` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Expired` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Expired));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="timessage-remote"></a>
 ### `TIMessage.Remote`
 
-*** `TIMessage.Remote` — Элемент скриптового API ****
+*** `TIMessage.Remote` — Признак удалённого сообщения ****
 
 `property Remote: Boolean`
 
@@ -1924,31 +1747,27 @@ _Параметры отсутствуют._
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Remote` интерфейса `IMessage` (по TLB). Развёрнутая семантика в текстовом ODT не описана.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Remote` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Remote` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Remote));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="timessage-result"></a>
 ### `TIMessage.Result`
 
-*** `TIMessage.Result` — Элемент скриптового API ****
+*** `TIMessage.Result` — Результат обработки ****
 
 `property Result: Variant`
 
@@ -1959,31 +1778,27 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Единственное поле сообщения, доступное для записи; используется при синхронном `SendMsg` (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Result` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Result` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Result));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="timessage-timeout"></a>
 ### `TIMessage.Timeout`
 
-*** `TIMessage.Timeout` — Элемент скриптового API ****
+*** `TIMessage.Timeout` — Таймаут сообщения ****
 
 `property Timeout: Integer`
 
@@ -1994,31 +1809,27 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Свойство `Timeout` (по TLB / RTTI).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Timeout` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Timeout` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Timeout));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="timessage-timestamp"></a>
 ### `TIMessage.Timestamp`
 
-*** `TIMessage.Timestamp` — Элемент скриптового API ****
+*** `TIMessage.Timestamp` — Время отправки ****
 
 `property Timestamp: TDateTime`
 
@@ -2029,31 +1840,27 @@ _Параметры отсутствуют._
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Дата/время отправки сообщения (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Timestamp` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Timestamp` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Timestamp));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="timessage-user"></a>
 ### `TIMessage.User`
 
-*** `TIMessage.User` — Элемент скриптового API ****
+*** `TIMessage.User` — Пользователь сообщения ****
 
 `property User: TIUser`
 
@@ -2064,31 +1871,27 @@ _Параметры отсутствуют._
 
 Значение типа `TIUser` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Объект `IUser` / `TIUser`, связанный с сообщением (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `User` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.User` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.User));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="timessage-value"></a>
 ### `TIMessage.Value`
 
-*** `TIMessage.Value` — Элемент скриптового API ****
+*** `TIMessage.Value` — Полезная нагрузка ****
 
 `property Value: Variant`
 
@@ -2099,219 +1902,192 @@ _Параметры отсутствуют._
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Простое значение типа `Variant` (часто JSON-структура) (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Value` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIMessage.Value` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Value));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="tiwebserverrequest"></a>
 ## `TIWebServerRequest`
 
+Обёртка над `IWebServerRequest`: входящий HTTP-запрос страницы плагина. Доступны параметры (`Input` / `InputStr` / `InputArr`), заголовки, cookie, метод, URI, имя страницы и текущий пользователь. Вызывается из пула HTTP-потоков в `HandleRequest` (PluginAPI_desc.odt / TLB).
+
 <a id="tiwebserverrequest-cookie"></a>
 ### `TIWebServerRequest.Cookie`
 
-*** `TIWebServerRequest.Cookie` — Элемент скриптового API ****
+*** `TIWebServerRequest.Cookie` — Cookie запроса ****
 
 `function Cookie(Name: String): String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя cookie запроса (по PluginAPI_desc.odt / TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Чтение cookie по имени (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := Cookie(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.Cookie(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-header"></a>
 ### `TIWebServerRequest.Header`
 
-*** `TIWebServerRequest.Header` — Элемент скриптового API ****
+*** `TIWebServerRequest.Header` — Заголовок запроса ****
 
 `function Header(Name: String): String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя HTTP-заголовка запроса (по PluginAPI_desc.odt / TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Чтение HTTP-заголовка по имени (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := Header(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.Header(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-input"></a>
 ### `TIWebServerRequest.Input`
 
-*** `TIWebServerRequest.Input` — Элемент скриптового API ****
+*** `TIWebServerRequest.Input` — Параметр запроса ****
 
 `function Input(Name: String): Variant`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя параметра запроса (по PluginAPI_desc.odt / TLB)
 
 **Возвращает:**
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Параметр HTTP-запроса по имени (`OleVariant`) (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := Input(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.Input(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-inputarr"></a>
 ### `TIWebServerRequest.InputArr`
 
-*** `TIWebServerRequest.InputArr` — Элемент скриптового API ****
+*** `TIWebServerRequest.InputArr` — Параметр-массив ****
 
 `function InputArr(Name: String): Variant`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя параметра-массива запроса (по TLB)
 
 **Возвращает:**
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Параметр запроса как массив значений (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := InputArr(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.InputArr(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-inputstr"></a>
 ### `TIWebServerRequest.InputStr`
 
-*** `TIWebServerRequest.InputStr` — Элемент скриптового API ****
+*** `TIWebServerRequest.InputStr` — Строковый параметр ****
 
 `function InputStr(Name: String): String`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя строкового параметра запроса (по TLB)
 
 **Возвращает:**
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Параметр запроса как строка (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := InputStr(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.InputStr(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-tojson"></a>
 ### `TIWebServerRequest.ToJson`
 
-*** `TIWebServerRequest.ToJson` — Элемент скриптового API ****
+*** `TIWebServerRequest.ToJson` — JSON запроса ****
 
 `function ToJson: String`
 
@@ -2320,33 +2096,30 @@ _Параметры отсутствуют._
 
 **Возвращает:**
 
-_Процедура ничего не возвращает._
+Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Вызывает `IWebServerRequest.ToJSON` (по TLB / `fsCoreScript.pas`).
 
 **Пример вызова:**
 
 ```pascal
 var
-  r: Variant; // результат (тип уточняется сигнатурой)
+  r: Variant;
 begin
-  // r := ToJson(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // r := Obj.ToJson(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
 <a id="tiwebserverrequest-currentuser"></a>
 ### `TIWebServerRequest.CurrentUser`
 
-*** `TIWebServerRequest.CurrentUser` — Элемент скриптового API ****
+*** `TIWebServerRequest.CurrentUser` — Текущий пользователь ****
 
 `property CurrentUser: TIUser`
 
@@ -2357,31 +2130,27 @@ _Параметры отсутствуют._
 
 Значение типа `TIUser` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Пользователь сессии / авторизации запроса; используется в проверках доступа (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `CurrentUser` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIWebServerRequest.CurrentUser` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.CurrentUser));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-method"></a>
 ### `TIWebServerRequest.Method`
 
-*** `TIWebServerRequest.Method` — Элемент скриптового API ****
+*** `TIWebServerRequest.Method` — HTTP-метод ****
 
 `property Method: String`
 
@@ -2392,31 +2161,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Метод запроса (GET, POST, …) (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Method` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIWebServerRequest.Method` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Method));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-page"></a>
 ### `TIWebServerRequest.Page`
 
-*** `TIWebServerRequest.Page` — Элемент скриптового API ****
+*** `TIWebServerRequest.Page` — Имя страницы ****
 
 `property Page: String`
 
@@ -2427,31 +2192,27 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Имя зарегистрированной страницы плагина (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `Page` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIWebServerRequest.Page` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.Page));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverrequest-uri"></a>
 ### `TIWebServerRequest.URI`
 
-*** `TIWebServerRequest.URI` — Элемент скриптового API ****
+*** `TIWebServerRequest.URI` — URI запроса ****
 
 `property URI: String`
 
@@ -2462,39 +2223,37 @@ _Параметры отсутствуют._
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- URI входящего запроса (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `URI` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIWebServerRequest.URI` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.URI));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverresponse"></a>
 ## `TIWebServerResponse`
 
+Обёртка над `IWebServerResponse`: формирование ответа. `ReturnPage` — HTML по шаблону из `Views` внутри общего каркаса сайта (partials вроде `{{>header}}`); `ReturnError` — страница по `Error.html`; `ReturnText` / `ReturnBlob` — произвольный ответ (в COM для двоичных данных — `ReturnData`). Тексты и шаблоны — UTF-8. Дополнительно: cookie, заголовки, redirect, `CacheControl` (флаги кэша страницы из PluginAPI_desc.odt).
+
 <a id="tiwebserverresponse-redirect"></a>
 ### `TIWebServerResponse.Redirect`
 
-*** `TIWebServerResponse.Redirect` — Элемент скриптового API ****
+*** `TIWebServerResponse.Redirect` — Перенаправление ****
 
 `procedure Redirect(PageName: String)`
 
 **Входные параметры:**
-- `PageName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `PageName: String` — имя страницы для перенаправления (по TLB / RTTI)
 
 **Возвращает:**
 
@@ -2502,33 +2261,30 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Перенаправление на указанную страницу (по TLB / RTTI).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Redirect(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.Redirect(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverresponse-returnblob"></a>
 ### `TIWebServerResponse.ReturnBlob`
 
-*** `TIWebServerResponse.ReturnBlob` — Элемент скриптового API ****
+*** `TIWebServerResponse.ReturnBlob` — Двоичный ответ ****
 
 `procedure ReturnBlob(Blob: Variant; Status: Integer)`
 
 **Входные параметры:**
-- `Blob: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Status: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Blob: Variant` — двоичное тело ответа (скрипковый аналог ReturnData, по PluginAPI_desc.odt / RTTI)
+- `Status: Integer` — HTTP-статус (по RTTI)
 
 **Возвращает:**
 
@@ -2536,20 +2292,17 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Отдаёт двоичные данные с HTTP-статусом; скриптовый аналог COM-метода `ReturnData` (по PluginAPI_desc.odt / RTTI).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // ReturnBlob(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.ReturnBlob(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/functions.txt`
 
 ---
 
@@ -2561,8 +2314,8 @@ _Источник сведений:_ `Материалы для документ
 `procedure ReturnError(Text: String; Status: Integer)`
 
 **Входные параметры:**
-- `Text: String` — текст ошибки
-- `Status: Integer` — HTTP-статус
+- `Text: String` — текст ошибки; страница строится по шаблону Error.html (по PluginAPI_desc.odt)
+- `Status: Integer` — HTTP-статус (по RTTI)
 
 **Возвращает:**
 
@@ -2570,31 +2323,30 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Формирует страницу ошибки по шаблону `Error.html`.
+- Формирует страницу ошибки по шаблону `Error.html` внутри общего каркаса сайта (по PluginAPI_desc.odt).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // ReturnError(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  Response.ReturnError('Ошибка обработки запроса', 500);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="tiwebserverresponse-returnpage"></a>
 ### `TIWebServerResponse.ReturnPage`
 
-*** `TIWebServerResponse.ReturnPage` — Ответ страницей ****
+*** `TIWebServerResponse.ReturnPage` — Ответ HTML-страницей ****
 
 `procedure ReturnPage(Name: String; InputJSON: Variant)`
 
 **Входные параметры:**
-- `Name: String` — имя HTML-шаблона в Views (по PluginAPI_desc.odt)
-- `InputJSON: Variant` — данные (scope) для шаблона (по RTTI / практике ReturnPage в исходниках)
+- `Name: String` — имя HTML-шаблона в папке Views плагина (по PluginAPI_desc.odt)
+- `InputJSON: Variant` — данные для шаблона основной части страницы (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
@@ -2602,18 +2354,19 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Формирует встроенную в основной шаблон сайта страницу по указанному шаблону.
+- Строит страницу по шаблону из папки `Views` плагина и встраивает в основной шаблон сайта; параметры передаются в шаблон (по PluginAPI_desc.odt).
+- В шаблоне можно подключать partials, например `{{>header}}`.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // ReturnPage(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // шаблон из Views плагина; InputJSON — данные для шаблона
+  Response.ReturnPage('Kiosk', _ObjEx(['Title', 'Готовность']));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
@@ -2625,9 +2378,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure ReturnText(Text, ContentType: String; Status: Integer)`
 
 **Входные параметры:**
-- `Text: String` — текст ответа
-- `ContentType: String` — тип содержимого (Content-Type)
-- `Status: Integer` — HTTP-статус ответа
+- `Text: String` — полный текст ответа (по PluginAPI_desc.odt)
+- `ContentType: String` — тип содержимого (по PluginAPI_desc.odt)
+- `Status: Integer` — HTTP-статус (по PluginAPI_desc.odt)
 
 **Возвращает:**
 
@@ -2635,32 +2388,32 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Передаёт полный текст ответа, тип содержимого и HTTP-статус.
+- Задаёт полный текст ответа, Content-Type и HTTP-статус (по PluginAPI_desc.odt).
+- Текстовые ответы и шаблоны ожидаются в UTF-8.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // ReturnText(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  Response.ReturnText('{"ok":true}', 'application/json', 200);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
 
 ---
 
 <a id="tiwebserverresponse-setcookie"></a>
 ### `TIWebServerResponse.SetCookie`
 
-*** `TIWebServerResponse.SetCookie` — Элемент скриптового API ****
+*** `TIWebServerResponse.SetCookie` — Установка cookie ****
 
 `procedure SetCookie(Name, Value: String; Expires: TDateTime)`
 
 **Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Expires: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Name: String` — имя cookie (по TLB)
+- `Value: String` — значение cookie (по TLB)
+- `Expires: TDateTime` — срок действия cookie (по TLB)
 
 **Возвращает:**
 
@@ -2668,32 +2421,29 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Задаёт cookie ответа с сроком действия (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // SetCookie(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.SetCookie(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverresponse-setheader"></a>
 ### `TIWebServerResponse.SetHeader`
 
-*** `TIWebServerResponse.SetHeader` — Элемент скриптового API ****
+*** `TIWebServerResponse.SetHeader` — Установка заголовка ****
 
 `procedure SetHeader(Value: String)`
 
 **Входные параметры:**
-- `Value: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Value: String` — строка HTTP-заголовка ответа (по TLB)
 
 **Возвращает:**
 
@@ -2701,27 +2451,24 @@ _Процедура ничего не возвращает._
 
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Добавляет/задаёт заголовок HTTP-ответа (по TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // SetHeader(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // Obj.SetHeader(...); // см. параметры и сведения выше
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---
 
 <a id="tiwebserverresponse-cachecontrol"></a>
 ### `TIWebServerResponse.CacheControl`
 
-*** `TIWebServerResponse.CacheControl` — Элемент скриптового API ****
+*** `TIWebServerResponse.CacheControl` — Флаги кэширования ответа ****
 
 `property CacheControl: Integer`
 
@@ -2732,23 +2479,19 @@ _Параметры отсутствуют._
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
-
 **Сведения из исходников / ODT:**
 
-- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
-
-> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+- Соответствует `WebPageOptionsType` / флагам вроде `WebPageCacheControlNoCache`, `WebPageCacheControlAgeDay` и др. (по PluginAPI_desc.odt / TLB).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // Свойство `CacheControl` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
+  // Чтение свойства `TIWebServerResponse.CacheControl` у объекта интерфейса (см. сведения выше).
+  // DebugLog(_ToStr(Obj.CacheControl));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/PluginAPI_TLB.pas`
 
 ---

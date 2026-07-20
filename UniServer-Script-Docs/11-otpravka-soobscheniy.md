@@ -10,7 +10,7 @@
 `function NewMessage(MsgName: String; Value: Variant): Variant`
 
 **Входные параметры:**
-- `MsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `MsgName: String` — имя сообщения вида `ИмяПлагина.ИмяСообщения` (по PluginAPI_desc.odt)
 - `Value: Variant` — полезная нагрузка сообщения (тип Variant по RTTI)
 
 **Возвращает:**
@@ -43,11 +43,11 @@ _Источник сведений:_ `Материалы для документ
 `function NewMessageEx(MsgName: String; Value: Variant; Blob, CurrentUser: Variant; Timeout: Integer): Variant`
 
 **Входные параметры:**
-- `MsgName: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Blob: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `CurrentUser: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Timeout: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `MsgName: String` — имя сообщения вида `ИмяПлагина.ИмяСообщения` (по PluginAPI_desc.odt)
+- `Value: Variant` — полезная нагрузка сообщения (`Variant`, по PluginAPI_desc.odt / RTTI)
+- `Blob: Variant` — двоичные данные сообщения (`IBlob` / `TIBlob`, по PluginAPI_desc.odt)
+- `CurrentUser: Variant` — пользователь, от имени которого создаётся сообщение (`IUser` / `TIUser`, по TLB)
+- `Timeout: Integer` — таймаут сообщения в миллисекундах (по RTTI / TLB)
 
 **Возвращает:**
 
