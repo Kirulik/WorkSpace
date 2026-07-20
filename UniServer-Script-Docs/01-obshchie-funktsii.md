@@ -1,0 +1,246 @@
+# Общие функции
+
+Документ сформирован по регистрации RTTI и проверенным сведениям исходников/ODT.
+
+<a id="tostr"></a>
+### `_ToStr`
+
+*** `_ToStr` — Преобразование значения в строку ****
+
+`function _ToStr(V: Variant; Format: Boolean = False): String`
+
+**Входные параметры:**
+- `V: Variant` — JSON-объект / JSON-массив или иное значение для преобразования в строку (по EventScript_desc.odt и `fsCommon.pas`)
+- `Format: Boolean = False` — выполнять ли форматирование (переводы строк, отступы) текста JSON при переводе в строку (по EventScript_desc.odt)
+
+**Возвращает:**
+
+строковое представление значения; для JSON — JSON-текст (по EventScript_desc.odt / `fsCommon.pas`)
+
+**Сведения из исходников / ODT:**
+
+- Для JSON-объекта или JSON-массива возвращает его текстовое представление.
+- При `Format = True` применяет `JsonReformat`.
+- Для даты формирует ISO 8601 с разделителем `T` и миллисекундами.
+
+**Пример вызова:**
+
+```pascal
+var
+  x: Variant;                // JSON-объект
+  s: String;                 // строковый результат
+begin
+  x := _Json('{"ID":10}');   // разобрать JSON-строку в объект
+  s := _ToStr(x);            // преобразовать объект в строку
+  s := _ToStr(x, True);      // то же с форматированием JSON
+  DebugLog(s);               // записать результат в лог
+end
+```
+
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+
+---
+
+<a id="todouble"></a>
+### `ToDouble`
+
+*** `ToDouble` — Преобразование в `Double` ****
+
+`function ToDouble(V: Variant): Double`
+
+**Входные параметры:**
+- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+
+**Возвращает:**
+
+Значение типа `Double` (тип подтверждён сигнатурой RTTI).
+
+**Сведения из исходников / ODT:**
+
+- Строковое значение преобразуется после удаления пробелов; остальные значения передаются стандартному преобразованию Variant.
+
+**Пример вызова:**
+
+```pascal
+var
+  d: Double;                 // числовой результат
+begin
+  d := ToDouble('12.5');     // преобразовать строку в Double
+  DebugLog(_ToStr(d));       // вывести результат
+end
+```
+
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
+
+<a id="newpackedguid"></a>
+### `NewPackedGuid`
+
+*** `NewPackedGuid` — Элемент скриптового API ****
+
+`function NewPackedGuid: String`
+
+**Входные параметры:**
+_Параметры отсутствуют._
+
+**Возвращает:**
+
+_Процедура ничего не возвращает._
+
+**Сведения из исходников / ODT:**
+
+- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
+
+> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+
+**Пример вызова:**
+
+```pascal
+var
+  g: String;                 // новый идентификатор
+begin
+  g := NewPackedGuid;        // создать packed GUID
+  DebugLog(g);               // записать в лог
+end
+```
+
+_Источник сведений:_ `Материалы для документации/functions.txt`
+
+---
+
+<a id="ispackedguid"></a>
+### `IsPackedGuid`
+
+*** `IsPackedGuid` — Элемент скриптового API ****
+
+`function IsPackedGuid(Guid: String): Boolean`
+
+**Входные параметры:**
+- `Guid: String` — проверяемая строка
+
+**Возвращает:**
+
+Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
+
+> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> семантика возвращаемого значения в текстовых материалах не описана.
+
+**Сведения из исходников / ODT:**
+
+- Доступность и типы подтверждены регистрацией RTTI в `functions.txt`.
+
+> <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в источниках найдена в основном сигнатура RTTI; развёрнутое назначение уточнить у тимлида.
+
+**Пример вызова:**
+
+```pascal
+var
+  ok: Boolean;               // результат проверки
+begin
+  ok := IsPackedGuid(NewPackedGuid); // проверить формат GUID
+  DebugLog(_ToStr(ok));              // вывести результат проверки
+end
+```
+
+_Источник сведений:_ `Материалы для документации/functions.txt`
+
+---
+
+<a id="sleep"></a>
+### `Sleep`
+
+*** `Sleep` — Приостановка выполнения ****
+
+`procedure Sleep(Milliseconds: Integer)`
+
+**Входные параметры:**
+- `Milliseconds: Integer` — длительность паузы в миллисекундах; по `fsCommon.pas` ограничивается диапазоном 0…10000
+
+**Возвращает:**
+
+_Процедура ничего не возвращает._
+
+**Сведения из исходников / ODT:**
+
+- Значение задержки ограничивается диапазоном от 0 до 10000 мс.
+
+**Пример вызова:**
+
+```pascal
+begin
+  Sleep(500);                // пауза 500 мс (в реализации ограничено 0…10000)
+  DebugLog('готово');        // продолжение после паузы
+end
+```
+
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
+
+<a id="isempty"></a>
+### `IsEmpty`
+
+*** `IsEmpty` — Проверка пустого значения ****
+
+`function IsEmpty(V: Variant): Boolean`
+
+**Входные параметры:**
+- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+
+**Возвращает:**
+
+Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
+
+**Сведения из исходников / ODT:**
+
+- Для JSON-массива или объекта проверяется `Count = 0`.
+- Для строк проверяется `Length = 0`; для остальных значений используется `VarIsEmptyOrNull`.
+
+**Пример вызова:**
+
+```pascal
+var
+  x: Variant;                // JSON-массив
+begin
+  x := _Arr();               // создать пустой массив
+  if IsEmpty(x) then         // проверить пустоту
+    DebugLog('пусто');       // ветка для пустого значения
+end
+```
+
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
+
+<a id="varisemptyornull"></a>
+### `VarIsEmptyOrNull`
+
+*** `VarIsEmptyOrNull` — Проверка Empty или Null ****
+
+`function VarIsEmptyOrNull(V: Variant): Boolean`
+
+**Входные параметры:**
+- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+
+**Возвращает:**
+
+Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
+
+**Сведения из исходников / ODT:**
+
+- Вызывает `VarIsEmptyOrNull` для переданного Variant.
+
+**Пример вызова:**
+
+```pascal
+var
+  v: Variant;                // Variant без присвоенного значения
+begin
+  if VarIsEmptyOrNull(v) then // проверка Empty/Null
+    DebugLog('Empty или Null');
+end
+```
+
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
