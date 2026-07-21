@@ -1,7 +1,5 @@
-# Build artifacts (пересобираются: mkdocs build)
+# Build artifacts
 site/
-
-# Python
 __pycache__/
 *.pyc
 .venv/
