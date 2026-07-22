@@ -12,6 +12,17 @@ python Документация/_build_help.py
 
 Результат: папка `help/` (относительные пути, индекс поиска вшит в `js/search-data.js`).
 
+## Варианты компоновки карточки функции (`tostr_layouts/`)
+
+Черновики дизайна одной карточки API (на примере `_ToStr`) — для выбора тимлидом. Содержимое одно и то же, отличается только подача.
+
+| Файл | Идея |
+|------|------|
+| [01_mdn_reference_card.md](tostr_layouts/01_mdn_reference_card.md) | Справка в стиле MDN: синтаксис → параметры → возврат → детали |
+| [02_contract_table_card.md](tostr_layouts/02_contract_table_card.md) | Контракт в таблицах |
+| [03_compact_prose_card.md](tostr_layouts/03_compact_prose_card.md) | Компактный текстовый блок |
+| [04_progressive_disclosure_card.md](tostr_layouts/04_progressive_disclosure_card.md) | Поэтапное раскрытие деталей |
+
 ## Содержание
 
 <details>
