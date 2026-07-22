@@ -1,6 +1,29 @@
 # Работа с универсальными журналами и справочниками
 
-Универсальные журналы — постоянное хранилище бизнес-данных UniServer (взвешивания, справочники, связанные документы). Скрипт обращается к журналу по имени: `GetRecord` / `GetRecords` читают, `SetRecord` сохраняет документ-`Variant` (часто JSON-объект с полями вроде `CODE`, `NUMB_TS`). Варианты `*NT` выполняют изменение без запуска триггеров; `Async*` ставят операцию в очередь сообщений без ожидания. `GetQuery` выполняет SQL к SQLite-таблице журнала (имя таблицы всегда `Journal`); `GetQueryEx` — к внешней БД с синтаксисом этой БД. Связи (`SetLink` / `GetLink` / `DeleteLinks`) и вложения (`GetBlob` / `SetBlob`) дополняют документ без дублирования всей структуры. Сохранение идёт через шину сообщений (`Journal.Operation` и `SendMsg` в реализации) — журнал связан с общей моделью обмена платформы, а не является изолированным SQL-API.
+Универсальные журналы — постоянное хранилище бизнес-данных UniServer (взвешивания, справочники, связанные документы). Скрипт обращается к журналу по имени: `GetRecord` / `GetRecords` читают, `SetRecord` сохраняет документ-`Variant`. Варианты `*NT` выполняют изменение без запуска триггеров (антирекурсия в ScriptsJournal); `Async*` ставят операцию в очередь без ожидания. `GetQuery` — SQL к SQLite-таблице `Journal`; `GetQueryEx` — к внешней БД. Связи (`SetLink*` / `DeleteLinks*`, типы SLAVE/MASTER/LINK) и вложения (`SetBlob`) дополняют документ. Триггеры `On*` и процедуры `Proc_*` (вызов через `ExecProc`) задают бизнес-логику журнала. Сохранение в реализации связано с шиной сообщений (`Journal.Operation`).
+
+## Паттерны журналов (ScriptsJournal)
+
+Контекст триггеров и процедур журнала (production):
+
+| Идентификатор | Роль |
+|---------------|------|
+| `JournalName` | имя текущего журнала |
+| `NewDoc` / `OldDoc` | документ до/после изменения |
+| `UpdatedProps` | набор изменённых полей; проверка `UpdatedProps.Exists('FIELD')` |
+| `Args` | аргументы хранимой процедуры |
+| `Result` | возвращаемое значение триггера/процедуры (`OnBefore*` обычно `Result := True`) |
+
+**Sync vs Async / NT**
+
+- `*NT` — без триггеров (антирекурсия при каскадах).
+- `Async*` — не блокировать `OnAfterUpdate`.
+- `AsyncSetRecord` (без NT) — когда нужно, чтобы сработали триггеры (уведомление AutoScale о `Doc_Link`).
+
+**Связи:** `SLAVE` (отвес→документ), `MASTER` (документ→отвес), `LINK` (отвес↔отвес).
+
+**Хранимые процедуры:** файл `Proc_Name.pas` → вызов `ExecProc(JournalName, 'Name', Args)`.
+
 
 <a id="getquery"></a>
 ### `GetQuery`
@@ -72,8 +95,8 @@ _Источник сведений:_ `Материалы для документ
 `function GetRecord(Journal, Code: String): Variant`
 
 **Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `Code: String` — идентификатор записи (по EventScript_desc.odt)
+- `Journal: String` — имя журнала (EventScript ODT; ScriptsJournal)
+- `Code: String` — идентификатор записи CODE (EventScript ODT; ScriptsJournal)
 
 **Возвращает:**
 
@@ -106,8 +129,8 @@ _Источник сведений:_ `Материалы для документ
 `function GetRecords(Journal: String; Args: Variant): Variant`
 
 **Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `Args: Variant` — параметры поиска (в примерах ODT: Filter, SortField, SortDesc, MaxRows)
+- `Journal: String` — имя журнала (EventScript ODT)
+- `Args: Variant` — объект: Filter (поля и операторы NotEqual/Range/OR), SortField, SortDesc, FirstRow, MaxRows (ScriptsJournal / ScriptsAutoControl)
 
 **Возвращает:**
 
@@ -116,29 +139,39 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - В `Args` используются поля `Filter`, `SortField`, `SortDesc`, `MaxRows`.
+- В `Args` используются `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (ScriptsJournal / EventScript ODT).
+- В `Filter` поддерживаются равенство полей, операторы `NotEqual`, `Range` (с `_ArrEx([from, to])`), вложенный `OR` через `_ObjEx` (ScriptsJournal, ScriptsAutoControl).
+- Пустой результат удобно проверять как `_ToStr(Docs) <> '[]'` и/или `Docs._Count > 0` (ScriptsJournal).
 
 **Пример вызова:**
 
 ```pascal
 var
   Args, Docs, Doc: Variant;
-  i: Integer;
 begin
-  Args := _Obj();                        // аргументы выборки
-  Args.Filter := _Obj();                 // фильтр
-  Args.Filter.NUMB_TS := 'A999AB45';     // условие по полю
-  Args.SortField := 'DATETIME_CREATE';   // сортировка
-  Args.SortDesc := True;                 // по убыванию
-  Args.MaxRows := 10;                    // лимит строк
-  Docs := GetRecords('WeighingJournal', Args); // выполнить поиск
-  for i := 0 to Docs._Count - 1 do begin
-    Doc := Docs.Value(i);                // очередная запись
-    DebugLog(Doc.NUMB_TS);               // вывести поле
-  end;
+  // ScriptsJournal: NotEqual + Range + FirstRow/MaxRows
+  Args := _ObjEx([
+    'Filter', _ObjEx([
+      'NUMB_TS', 'A999AB45',
+      'CODE', _ObjEx(['NotEqual', 'D307EB...']),
+      'DATETIME_CREATE', _ObjEx(['Range', _ArrEx([
+        DateTimeToIso8601(IncHour(Now(), -48)),
+        DateTimeToIso8601(Now())
+      ])]),
+      'DELETED', 0
+    ]),
+    'SortField', 'DATETIME_CREATE',
+    'SortDesc', True,
+    'FirstRow', 0,
+    'MaxRows', 1
+  ]);
+  Docs := GetRecords(JournalName, Args);
+  if (_ToStr(Docs) <> '[]') and (Docs._Count > 0) then
+    Doc := _Json(_ToStr(Docs.Value(0)));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 ---
 
@@ -150,8 +183,8 @@ _Источник сведений:_ `Материалы для документ
 `function SetRecord(Journal: String; Doc: Variant): String`
 
 **Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `Doc: Variant` — данные записи (по EventScript_desc.odt)
+- `Journal: String` — имя журнала (EventScript ODT; ScriptsAutoControl)
+- `Doc: Variant` — документ записи (JSON-объект); часто содержит CODE (EventScript ODT; ScriptsAutoControl)
 
 **Возвращает:**
 
@@ -161,23 +194,28 @@ _Источник сведений:_ `Материалы для документ
 
 - Перед отправкой удаляет поле `DBID` из документа.
 - Операция передаётся сообщением `Journal.Operation` через `SendMsg`.
+- Возвращает код записи; в ScriptsAutoControl результат кладут в `Result_CODE` / `Msg.Result`.
+- После сохранения часто вызывают `SetBlob(Journal, Code, Field, Blob)` для фото (ScriptsAutoControl / ScriptsCraneScale).
+- Операция в реализации уходит через `Journal.Operation` / `SendMsg` (fsCoreScript).
 
 **Пример вызова:**
 
 ```pascal
 var
-  Doc: Variant;
-  Code: String;
+  LNewDoc: Variant;
+  LCode: String;
 begin
-  Doc := _Obj();                         // документ записи
-  Doc.CODE := 'D307EB...205027';         // код записи
-  Doc.NUMB_TS := 'A999AB45';              // поле данных
-  Code := SetRecord('WeighingJournal', Doc); // сохранить запись
-  DebugLog(Code);                        // результат операции
+  LNewDoc := _Obj();
+  LNewDoc.CODE := Result_DocId;
+  LNewDoc.NUMB_TS := Result_NUMB_TS;
+  LCode := SetRecord(TrafficJournalName, LNewDoc); // ScriptsAutoControl
+  if not IsEmpty(Result_PHOTO1) then
+    SetBlob(TrafficJournalName, Result_DocId, 'PHOTO1', Result_PHOTO1);
+  Msg.Result := True;
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 ---
 
@@ -189,8 +227,8 @@ _Источник сведений:_ `Материалы для документ
 `function SetRecordNT(Journal: String; Doc: Variant): String`
 
 **Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `Doc: Variant` — данные записи (по EventScript_desc.odt)
+- `Journal: String` — имя журнала (EventScript ODT; ScriptsJournal)
+- `Doc: Variant` — документ записи без запуска триггеров (ScriptsJournal)
 
 **Возвращает:**
 
@@ -200,21 +238,21 @@ _Источник сведений:_ `Материалы для документ
 
 - Выполняет изменение записи без запуска триггеров.
 - Операция передаётся сообщением `Journal.Operation` через `SendMsg`.
+- Без запуска триггеров журнала — для антирекурсии при каскадных правках (ScriptsJournal).
+- Операция передаётся сообщением `Journal.Operation` через `SendMsg` (fsCoreScript).
 
 **Пример вызова:**
 
 ```pascal
 var
-  Doc: Variant;
+  LDocID: String;
 begin
-  Doc := _Obj();
-  Doc.CODE := 'D307EB...205027';
-  Doc.NUMB_TS := 'A999AB45';
-  DebugLog(SetRecordNT('WeighingJournal', Doc)); // сохранить без запуска триггеров
+  // ScriptsJournal Proc_SetSlaveDoc — без триггеров DocsJournal
+  LDocID := SetRecordNT('DocsJournal', LNewDocument);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -226,14 +264,14 @@ _Источник сведений:_ `Материалы для документ
 `function GetView(Journal, Name: String; Params, Filter: Variant; SortField: String; SortDesc: Boolean; FirstRow, MaxRows: Integer): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Params: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Filter: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `SortField: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `SortDesc: Boolean` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `FirstRow: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `MaxRows: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (EventScript ODT / RTTI)
+- `Name: String` — имя представления (EventScript ODT / RTTI)
+- `Params: Variant` — параметры представления (RTTI; уточнение семантики — по конфигурации журнала)
+- `Filter: Variant` — фильтр представления (RTTI)
+- `SortField: String` — поле сортировки (RTTI; как в GetRecords)
+- `SortDesc: Boolean` — сортировка по убыванию (RTTI)
+- `FirstRow: Integer` — смещение первой строки (RTTI; ScriptsJournal для GetRecords)
+- `MaxRows: Integer` — максимум строк (RTTI)
 
 **Возвращает:**
 
@@ -242,19 +280,20 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Получает данные именованного представления журнала.
+- В RTTI сигнатура: `Params`, `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (functions.txt).
+- В EventScript ODT пример со старой сигнатурой `(Args, Params)` — ориентироваться на RTTI.
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetView(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // EventScript ODT (сигнатура в RTTI шире: Params, Filter, SortField, SortDesc, FirstRow, MaxRows)
+  DebugLog(_ToStr(GetView('WeighingJournal', 'Test',
+    _ArrEx(['CODE', '']), Null, '', False, 0, 100)));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/functions.txt`
 
 ---
 
@@ -266,9 +305,9 @@ _Источник сведений:_ `Материалы для документ
 `function ExecProc(Journal, Name: String; Args: Variant): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Args: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsJournal; EventScript ODT)
+- `Name: String` — имя процедуры без префикса Proc_ (ScriptsJournal: 'SetSlaveDoc')
+- `Args: Variant` — аргументы; в ScriptsJournal — объект `_ObjEx([...])`
 
 **Возвращает:**
 
@@ -277,19 +316,24 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Выполняет хранимую процедуру журнала.
+- Вызывает хранимую процедуру журнала; имя без префикса файла `Proc_` (файл `Proc_SetSlaveDoc` → `'SetSlaveDoc'`).
+- В ScriptsJournal аргументы передают как `_ObjEx([...])`, не позиционный `_ArrEx` (пример ODT устарел относительно практики).
+- Синхронный вызов из триггеров `OnBefore*` / процедур; для фона после update — `AsyncExecProc`.
 
 **Пример вызова:**
 
 ```pascal
 var
-  Code: String;
+  LDocID: String;
 begin
-  Code := '';
-  DebugLog(_ToStr(ExecProc('WeighingJournal', 'SetSlaveDoc', _ArrEx([Code])))); // хранимая процедура
+  // ScriptsJournal: имя без Proc_; аргументы — объект
+  LDocID := ExecProc(JournalName, 'SetSlaveDoc',
+    _ObjEx(['CODE', Args.CODE, 'NAME', 'DOC1', 'CAPTION', 'Документ']));
+  DebugLog(LDocID);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -301,8 +345,8 @@ _Источник сведений:_ `Материалы для документ
 `function GetBlobs(Journal, Code: String): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI / Scripts*)
+- `Code: String` — CODE записи (RTTI / Scripts*)
 
 **Возвращает:**
 
@@ -311,15 +355,13 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Возвращает вложения (blob) записи журнала.
+- Возвращает набор вложений записи журнала по CODE.
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetBlobs(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  DebugLog(_ToStr(GetBlobs(TrafficJournalName, Result_DocId))); // все вложения записи
 end
 ```
 
@@ -335,9 +377,9 @@ _Источник сведений:_ `Материалы для документ
 `function GetBlob(Journal, Code, Name: String): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsAutoControl / RTTI)
+- `Code: String` — CODE записи (ScriptsAutoControl / RTTI)
+- `Name: String` — имя поля вложения, например PHOTO1 (ScriptsAutoControl)
 
 **Возвращает:**
 
@@ -346,19 +388,18 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Читает именованное вложение записи.
+- Читает именованное вложение записи по журналу, CODE и имени поля (зеркало `SetBlob` в ScriptsAutoControl).
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetBlob(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // зеркало SetBlob из ScriptsAutoControl
+  Result_PHOTO1 := GetBlob(TrafficJournalName, Result_DocId, 'PHOTO1');
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 ---
 
@@ -370,10 +411,10 @@ _Источник сведений:_ `Материалы для документ
 `procedure SetBlob(Journal, Code, Name: String; Blob: Variant)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Blob: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsAutoControl)
+- `Code: String` — CODE записи (ScriptsAutoControl)
+- `Name: String` — имя поля вложения, например PHOTO1 (ScriptsAutoControl)
+- `Blob: Variant` — данные вложения; писать после проверки not IsEmpty (ScriptsAutoControl)
 
 **Возвращает:**
 
@@ -382,17 +423,20 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Сохраняет именованное вложение записи.
+- Пишет именованное вложение записи после `SetRecord`; перед вызовом проверяют `not IsEmpty(Blob)` (ScriptsAutoControl).
+- Аргументы: журнал, CODE записи, имя поля (например `PHOTO1`), данные blob.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // SetBlob(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // ScriptsAutoControl после SetRecord
+  if not IsEmpty(Result_PHOTO1) then
+    SetBlob(TrafficJournalName, Result_DocId, 'PHOTO1', Result_PHOTO1);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 ---
 
@@ -404,13 +448,13 @@ _Источник сведений:_ `Материалы для документ
 `function SetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Caption: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkJournal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkType: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — журнал исходной записи (ScriptsJournal)
+- `Code: String` — CODE исходной записи (ScriptsJournal)
+- `Name: String` — имя/ключ связи, например DOC1 (ScriptsJournal)
+- `Caption: String` — отображаемое имя связи, например «Документ» (ScriptsJournal)
+- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
+- `LinkType: String` — тип связи: SLAVE / MASTER / LINK (ScriptsJournal)
+- `Link: String` — CODE связанной записи (ScriptsJournal)
 
 **Возвращает:**
 
@@ -419,19 +463,20 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Создаёт связь записи с другой записью/журналом.
+- Создаёт связь записи с записью другого (или того же) журнала **с** запуском триггеров.
+- В ScriptsJournal чаще `SetLinkNT`; аргументы те же: `LinkType` = `SLAVE` / `MASTER` / `LINK`.
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := SetLink(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // как SetLinkNT (ScriptsJournal), но с запуском триггеров
+  SetLink(JournalName, NewDoc.CODE, 'DOC1', 'Документ',
+    'DocsJournal', 'SLAVE', NewDoc.Doc_Link);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
@@ -443,13 +488,13 @@ _Источник сведений:_ `Материалы для документ
 `function SetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Caption: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkJournal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkType: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — журнал исходной записи (ScriptsJournal)
+- `Code: String` — CODE исходной записи (ScriptsJournal)
+- `Name: String` — имя/ключ связи (ScriptsJournal)
+- `Caption: String` — подпись связи (ScriptsJournal)
+- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
+- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
+- `Link: String` — CODE связанной записи (ScriptsJournal)
 
 **Возвращает:**
 
@@ -458,19 +503,23 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Создаёт связь без запуска триггеров.
+- Как `SetLink`, но без запуска триггеров — типичный вызов из `OnAfterUpdate` (ScriptsJournal).
+- Пример: `SetLinkNT(JournalName, CODE, 'DOC1', 'Документ', 'DocsJournal', 'SLAVE', Doc_Link)`.
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := SetLinkNT(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  // ScriptsJournal: отвес → DocsJournal (SLAVE) и обратно (MASTER)
+  SetLinkNT(JournalName, NewDoc.CODE, 'DOC1', 'Документ',
+    'DocsJournal', 'SLAVE', NewDoc.Doc_Link);
+  SetLinkNT('DocsJournal', NewDoc.Doc_Link,
+    'Weighing' + NewDoc.TYPMASSA, NewDoc.TYPMASSACAPTION,
+    JournalName, 'MASTER', NewDoc.CODE);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -482,9 +531,9 @@ _Источник сведений:_ `Материалы для документ
 `function GetLink(Journal, Code, Name: String): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи (RTTI)
+- `Name: String` — имя связи (RTTI)
 
 **Возвращает:**
 
@@ -493,19 +542,17 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Возвращает данные связи по имени.
+- Возвращает данные связи по имени (`Name`, как в `SetLink*`).
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetLink(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  DebugLog(_ToStr(GetLink(JournalName, NewDoc.CODE, 'DOC1'))); // связь по имени
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -517,9 +564,9 @@ _Источник сведений:_ `Материалы для документ
 `function GetLink_Link(Journal, Code, Name: String): String`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи (RTTI)
+- `Name: String` — имя связи (RTTI)
 
 **Возвращает:**
 
@@ -528,19 +575,17 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Возвращает строковый идентификатор связи.
+- Возвращает строковый CODE связанной записи по имени связи.
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetLink_Link(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  DebugLog(GetLink_Link(JournalName, NewDoc.CODE, 'DOC1')); // CODE связанной записи
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -552,9 +597,9 @@ _Источник сведений:_ `Материалы для документ
 `function GetLinks(Journal, Code: String; MaxRows: Integer): Variant`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `MaxRows: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи (RTTI)
+- `MaxRows: Integer` — ограничение числа связей (RTTI)
 
 **Возвращает:**
 
@@ -563,15 +608,13 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Возвращает связи записи.
+- Возвращает список связей записи (`MaxRows` ограничивает выборку).
 
 **Пример вызова:**
 
 ```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
 begin
-  // r := GetLinks(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
+  DebugLog(_ToStr(GetLinks(JournalName, NewDoc.CODE, 100))); // список связей
 end
 ```
 
@@ -587,9 +630,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure DeleteLinks(Journal, Code, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи или пусто для обратных (ScriptsJournal для NT)
+- `Link: String` — CODE связанной записи или пусто для всех исходящих (ScriptsJournal для NT)
 
 **Возвращает:**
 
@@ -598,17 +641,19 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Удаляет связи записи.
+- Удаляет связи записи **с** триггерами; семантика пустых Code/Link — как у `DeleteLinksNT` (ScriptsJournal).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // DeleteLinks(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // как DeleteLinksNT (ScriptsJournal), но с триггерами
+  DeleteLinks(JournalName, NewDoc.CODE, '');
+  DeleteLinks(JournalName, '', NewDoc.CODE);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
@@ -620,9 +665,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure UnDeleteLinks(Journal, Code, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи (RTTI)
+- `Link: String` — CODE связанной записи (RTTI)
 
 **Возвращает:**
 
@@ -631,13 +676,13 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Восстанавливает удалённые связи.
+- Восстанавливает удалённые связи записи (с триггерами).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // UnDeleteLinks(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  UnDeleteLinks(JournalName, NewDoc.CODE, ''); // восстановить связи записи
 end
 ```
 
@@ -653,9 +698,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure DeleteLinksNT(Journal, Code, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsJournal)
+- `Code: String` — CODE записи; пустая строка — режим «все входящие на Link» (ScriptsJournal)
+- `Link: String` — CODE связанной записи; пустая строка — все исходящие с Code (ScriptsJournal)
 
 **Возвращает:**
 
@@ -664,17 +709,20 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Удаляет связи без запуска триггеров.
+- Удаление связей без триггеров (ScriptsJournal).
+- `DeleteLinksNT(J, CODE, '')` — все исходящие с записи; `DeleteLinksNT(J, '', CODE)` — все входящие на запись; оба аргумента заданы — одна пара.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // DeleteLinksNT(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // ScriptsJournal при пометке DELETED
+  DeleteLinksNT(JournalName, NewDoc.CODE, ''); // все исходящие
+  DeleteLinksNT(JournalName, '', NewDoc.CODE); // все входящие
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -686,9 +734,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure UnDeleteLinksNT(Journal, Code, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (RTTI)
+- `Code: String` — CODE записи (RTTI)
+- `Link: String` — CODE связанной записи (RTTI)
 
 **Возвращает:**
 
@@ -697,13 +745,13 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Восстанавливает связи без запуска триггеров.
+- Восстановление связей без запуска триггеров.
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // UnDeleteLinksNT(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  UnDeleteLinksNT(JournalName, NewDoc.CODE, ''); // без триггеров
 end
 ```
 
@@ -719,8 +767,8 @@ _Источник сведений:_ `Материалы для документ
 `procedure AsyncSetRecord(Journal: String; Doc: Variant)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Doc: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsJournal)
+- `Doc: Variant` — документ для асинхронного сохранения с триггерами (ScriptsJournal)
 
 **Возвращает:**
 
@@ -729,17 +777,20 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Ставит сохранение записи в очередь сообщений.
+- Асинхронное сохранение **с** триггерами — чтобы уведомить связанные плагины (ScriptsJournal `SetSlaveDoc`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // AsyncSetRecord(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // ScriptsJournal SetSlaveDoc — с триггерами (уведомить AutoScale)
+  AsyncSetRecord(JournalName, _ObjEx([
+    'CODE', Args.CODE, 'Doc_Link', LDocID, 'Doc_Numb', LSlaveDOCUMENT_NUMBER
+  ]));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -751,8 +802,8 @@ _Источник сведений:_ `Материалы для документ
 `procedure AsyncSetRecordNT(Journal: String; Doc: Variant)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Doc: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsJournal)
+- `Doc: Variant` — документ для асинхронного сохранения без триггеров (ScriptsJournal)
 
 **Возвращает:**
 
@@ -761,17 +812,19 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Асинхронное сохранение без запуска триггеров.
+- Асинхронное сохранение без триггеров — массовые правки пары отвесов без рекурсии (ScriptsJournal).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // AsyncSetRecordNT(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  AsyncSetRecordNT(JournalName, _ObjEx([
+    'CODE', LMasterLinkDoc.CODE, 'Doc_Link', LDocID, 'Doc_Numb', LSlaveDOCUMENT_NUMBER
+  ]));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -783,9 +836,9 @@ _Источник сведений:_ `Материалы для документ
 `procedure AsyncExecProc(Journal, Name: String; Args: Variant)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Args: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — имя журнала (ScriptsJournal)
+- `Name: String` — имя процедуры без префикса Proc_ (ScriptsJournal)
+- `Args: Variant` — аргументы процедуры (обычно `_ObjEx` / документ, ScriptsJournal)
 
 **Возвращает:**
 
@@ -794,17 +847,19 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Ставит выполнение хранимой процедуры в очередь.
+- Асинхронный вызов хранимой процедуры (не блокирует `OnAfterUpdate`, ScriptsJournal).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // AsyncExecProc(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // ScriptsJournal OnAfterUpdate — не блокировать сохранение
+  if IsPackedGuid(NewDoc.RECORD_LINK) then
+    AsyncExecProc(JournalName, 'UpdateWeighing2', NewDoc);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
@@ -816,13 +871,13 @@ _Источник сведений:_ `Материалы для документ
 `procedure AsyncSetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Caption: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkJournal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkType: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — журнал исходной записи (RTTI / ScriptsJournal)
+- `Code: String` — CODE исходной записи
+- `Name: String` — имя связи
+- `Caption: String` — подпись связи
+- `LinkJournal: String` — журнал связанной записи
+- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
+- `Link: String` — CODE связанной записи
 
 **Возвращает:**
 
@@ -831,17 +886,19 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Ставит создание связи в очередь сообщений.
+- Асинхронное создание связи с триггерами; аргументы как у `AsyncSetLinkNT` (ScriptsJournal).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // AsyncSetLink(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  // как AsyncSetLinkNT (ScriptsJournal), но с триггерами
+  AsyncSetLink(JournalName, Args.CODE, Args.NAME, Args.CAPTION,
+    'DocsJournal', 'SLAVE', LDocID);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 ---
 
@@ -853,13 +910,13 @@ _Источник сведений:_ `Материалы для документ
 `procedure AsyncSetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
 
 **Входные параметры:**
-- `Journal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Code: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Caption: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkJournal: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `LinkType: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Link: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+- `Journal: String` — журнал исходной записи (ScriptsJournal)
+- `Code: String` — CODE исходной записи (ScriptsJournal)
+- `Name: String` — имя связи (ScriptsJournal)
+- `Caption: String` — подпись связи (ScriptsJournal)
+- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
+- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
+- `Link: String` — CODE связанной записи (ScriptsJournal)
 
 **Возвращает:**
 
@@ -868,16 +925,17 @@ _Процедура ничего не возвращает._
 **Сведения из исходников / ODT:**
 
 - Асинхронное создание связи без триггеров.
+- Асинхронное создание связи без триггеров (ScriptsJournal `Proc_SetSlaveDoc`).
 
 **Пример вызова:**
 
 ```pascal
 begin
-  // AsyncSetLinkNT(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
+  AsyncSetLinkNT(JournalName, Args.CODE, Args.NAME, Args.CAPTION,
+    'DocsJournal', 'SLAVE', LDocID);
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---

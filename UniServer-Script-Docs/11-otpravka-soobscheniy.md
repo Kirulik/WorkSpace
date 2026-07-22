@@ -1,6 +1,6 @@
 # Отправка сообщений
 
-Сообщения — шина взаимодействия плагинов и ядра UniServer. Имя имеет вид `ИмяПлагина.ИмяСообщения` (например `Camera1.FrameJpg`); у сообщения есть `Value` (`Variant`), опциональный `Blob`, метка времени и признак устаревания. `NewMessage` / `NewMessageEx` создают объект; `PostMsg` ставит его в очередь асинхронно (если нет обработчиков — операция не доставляет сообщение); `SendMsg` ждёт завершения обработки у всех подписчиков до `Timeout` мс (`-1` — без лимита) и возвращает результат из поля `Result`. Обработчики сообщений работают в отдельных потоках ядра; устаревшие сообщения можно не обрабатывать. Через эту же шину уходят операции журналов (`Journal.Operation`) и системные события вроде `Core.ServerStarted`. В конструкторе (AutoScaleWebKiosk1) глобальные переменные могут публиковаться сообщениями — обмен «страница ↔ логика ↔ оборудование» строится на той же модели.
+Сообщения — шина взаимодействия плагинов и ядра UniServer. Имя имеет вид `ИмяПлагина.ИмяСообщения`; в ScriptsAutoControl / BunkerScale / CraneScale команду почти всегда собирают как `PluginName + '.Command'` (например `PluginName + '.FindPassDoc'`). У сообщения есть `Value` (`Variant`), опциональный `Blob`, метка времени и признак устаревания. `NewMessage` / `NewMessageEx` создают объект; `PostMsg` ставит в очередь асинхронно (FixPhoto, SaveRecord, Enable — fire-and-forget); `SendMsg` ждёт обработки до `Timeout` мс и возвращает поле `Result`. В cmd-скриптах ответ кладут в **`Msg.Result`**; снаружи его читают как значение `SendMsg(...)`. Обработчики работают в потоках ядра. Через эту же шину уходят операции журналов (`Journal.Operation`) и системные события вроде `Core.ServerStarted`.
 
 <a id="newmessage"></a>
 ### `NewMessage`
@@ -89,19 +89,18 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Постановка в очередь выполняется асинхронно; возвращает `False`, если обработчиков нет.
+- Асинхронная постановка в очередь; в Scripts* — FixPhoto, SaveRecord, Enable (fire-and-forget).
+- Глобальная RTTI-процедура `procedure PostMsg` не возвращает значение (в отличие от `TICoreMessages.PostMsg`).
 
 **Пример вызова:**
 
 ```pascal
-var
-  LMsg: Variant;
 begin
-  LMsg := NewMessage('Camera1.FrameJpg', ''); // подготовить сообщение
-  PostMsg(LMsg);                              // отправить асинхронно
+  PostMsg(NewMessage(PluginName + '.FixPhoto', '')); // fire-and-forget
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 ---
 
@@ -124,6 +123,8 @@ _Источник сведений:_ `Материалы для документ
 
 - Ожидает обработку до `Timeout` мс; `-1` означает бесконечное ожидание.
 - Результат берётся из поля `Result` сообщения.
+- Синхронная отправка; результат — поле `Result` сообщения после ожидания.
+- В cmd-скриптах ответ кладут в `Msg.Result`; снаружи читают значение `SendMsg(...)`.
 
 **Пример вызова:**
 
@@ -131,12 +132,13 @@ _Источник сведений:_ `Материалы для документ
 var
   LMsg, LRes: Variant;
 begin
-  LMsg := NewMessage('Camera1.FrameJpg', ''); // подготовить сообщение
-  LRes := SendMsg(LMsg, 1000);                // отправить синхронно, ждать до 1000 мс
-  DebugLog(LRes);                             // результат обработки
+  // ScriptsAutoControl: имя = PluginName + '.Command'
+  LMsg := NewMessage(PluginName + '.FindPassDoc', _ToStr(_ObjEx(['Method', 'RFID', 'Label', RFID])));
+  LRes := SendMsg(LMsg, 2000);
+  DebugLog(_ToStr(LRes));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`
+_Источник сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 ---

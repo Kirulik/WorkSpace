@@ -19,6 +19,8 @@
 **Сведения из исходников / ODT:**
 
 - Записывает указанное значение в `EventScript.log`.
+- Пишет значение в лог плагина (`EventScript.log`).
+- В Scripts* часто: `DebugLog('...' + _ToStr(ExceptionMessage))` в `except`.
 
 **Пример вызова:**
 

@@ -91,19 +91,17 @@ _Параметры отсутствуют._
 **Сведения из исходников / ODT:**
 
 - Генерирует компактный идентификатор GUID.
+- Генерирует компактный GUID; в Scripts* — `Result_DocId` / CODE операции до `SetRecord`.
 
 **Пример вызова:**
 
 ```pascal
-var
-  g: String;                 // новый идентификатор
 begin
-  g := NewPackedGuid;        // создать packed GUID
-  DebugLog(g);               // записать в лог
+  Result_DocId := NewPackedGuid; // ScriptsCraneScale sme.Empty_OnExit
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 ---
 
@@ -124,19 +122,19 @@ _Источник сведений:_ `Материалы для документ
 **Сведения из исходников / ODT:**
 
 - Проверяет, что строка соответствует формату packed GUID.
+- Проверка формата packed GUID; в ScriptsJournal — идиома «есть живая ссылка» перед `GetRecord` / `SetLink*`.
 
 **Пример вызова:**
 
 ```pascal
-var
-  ok: Boolean;               // результат проверки
 begin
-  ok := IsPackedGuid(NewPackedGuid); // проверить формат GUID
-  DebugLog(_ToStr(ok));              // вывести результат проверки
+  if IsPackedGuid(NewDoc.Doc_Link) then
+    AsyncExecProc(JournalName, 'UpdateSlaveDoc',
+      _ObjEx(['MasterDoc', NewDoc, 'SaveRecord', True]));
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 ---
 
