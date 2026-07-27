@@ -22,6 +22,7 @@ python Документация/_build_help.py
 | [02_contract_table_card.md](tostr_layouts/02_contract_table_card.md) | Контракт в таблицах |
 | [03_compact_prose_card.md](tostr_layouts/03_compact_prose_card.md) | Компактный текстовый блок |
 | [04_progressive_disclosure_card.md](tostr_layouts/04_progressive_disclosure_card.md) | Поэтапное раскрытие деталей |
+| [_ToStr_collapsible_example.md](tostr_layouts/_ToStr_collapsible_example.md) | Компактная карточка: пример в свёрнутом `<details>` |
 
 ## Содержание
 
