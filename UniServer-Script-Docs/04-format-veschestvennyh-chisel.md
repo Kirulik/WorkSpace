@@ -21,7 +21,7 @@ function SetFormatPrecision(Value: Double; Precision: Integer): Double
 
 ## Описание
 
-Возвращает значение, округлённое до указанного числа знаков после запятой. В весовых сценариях применяют к массе перед записью в результат или журнал.
+Возвращает значение, округлённое до указанного числа знаков после запятой.
 
 > **Особенности:** Вычисляет `round(Value * 10^Precision) / 10^Precision`. Округление `round(Value * 10^Precision) / 10^Precision` (fsCommon). В весовых Scripts* любое значение массы перед записью в Result_* / журнал пропускают через `SetFormatPrecision(..., Massa_Precision)`.
 
@@ -64,7 +64,7 @@ function SetFormatRoundFromDiscret(Value: double; Precision: integer; Discret: d
 
 ## Описание
 
-Возвращает значение, сначала приведённое к сетке дискрета, затем округлённое до заданной точности. Нужно, чтобы масса совпадала с дискретностью весов.
+Возвращает значение, приведённое к дискрету и округлённое до заданной точности.
 
 > **Особенности:** Если `Discret < 0.00000001`, он заменяется на `0.00000001`. Вычисляет `SetFormatPrecision(round(Value / Discret) * Discret, Precision)`.
 
