@@ -1,17 +1,17 @@
 :root {
   --bg: #eff1f5;
   --panel: #ffffff;
-  --sidebar: #777f8b;
+  --sidebar: #5f6773;
   --sidebar-text: #ffffff;
-  --sidebar-muted: #dbdfe8;
-  --accent: #5f6773;
+  --sidebar-muted: #d5dae3;
+  --accent: #4a515c;
   --accent-soft: #dbdfe8;
-  --border: #dbdfe8;
-  --text: #4a515c;
-  --muted: #777f8b;
-  --code-bg: #dbdfe8;
-  --warn-bg: #eff1f5;
-  --warn-border: #777f8b;
+  --border: #c5cad6;
+  --text: #1e2430;
+  --muted: #4a515c;
+  --code-bg: #e4e8f0;
+  --warn-bg: #f3f5f9;
+  --warn-border: #5f6773;
   --radius: 6px;
   --font: "Segoe UI", "Candara", "Trebuchet MS", sans-serif;
   --mono: "Cascadia Mono", "Consolas", "Courier New", monospace;
@@ -173,8 +173,8 @@ body {
 
 .nav button.active {
   background: var(--panel);
-  color: var(--sidebar);
-  font-weight: 600;
+  color: #1e2430;
+  font-weight: 700;
 }
 
 .main {
@@ -198,8 +198,9 @@ body {
 .lead {
   margin: 0;
   color: var(--muted);
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 0.98rem;
+  line-height: 1.55;
+  font-weight: 500;
 }
 
 .content {
@@ -207,7 +208,9 @@ body {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem 1.5rem 2rem;
-  line-height: 1.55;
+  line-height: 1.6;
+  color: var(--text);
+  font-size: 0.98rem;
 }
 
 .content h1 {
@@ -240,19 +243,21 @@ body {
 
 .content code {
   font-family: var(--mono);
-  font-size: 0.88em;
+  font-size: 0.9em;
   background: var(--code-bg);
-  padding: 0.1em 0.35em;
+  color: var(--text);
+  padding: 0.12em 0.4em;
   border-radius: 3px;
+  font-weight: 600;
 }
 
 .content pre {
-  background: var(--sidebar);
+  background: #3f4652;
   color: #ffffff;
   padding: 0.9rem 1rem;
   border-radius: var(--radius);
   overflow: auto;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 .content pre code {
@@ -273,28 +278,32 @@ body {
   background: var(--warn-bg);
   border-left: 3px solid var(--warn-border);
   color: var(--text);
+  font-weight: 500;
 }
 
 .content a {
-  color: var(--sidebar);
+  color: #2a3038;
+  font-weight: 600;
 }
 
 .content table {
   border-collapse: collapse;
   width: 100%;
   margin: 1rem 0;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
 }
 
 .content th,
 .content td {
   border: 1px solid var(--border);
-  padding: 0.4rem 0.55rem;
+  padding: 0.45rem 0.6rem;
   text-align: left;
+  color: var(--text);
 }
 
 .content th {
   background: var(--bg);
+  font-weight: 700;
 }
 
 .content li {
@@ -302,7 +311,7 @@ body {
 }
 
 .welcome {
-  color: var(--muted);
+  color: var(--text);
 }
 
 .welcome ul {
