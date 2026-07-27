@@ -54,6 +54,14 @@
     });
   }
 
+  function stripSectionChrome(html) {
+    // Заголовок раздела и вступление уже показаны в .top — убираем дубли из markdown HTML.
+    var out = String(html || "");
+    out = out.replace(/^\s*<h1[^>]*>[\s\S]*?<\/h1>\s*/i, "");
+    out = out.replace(/^\s*<p>[\s\S]*?<\/p>\s*/i, "");
+    return out;
+  }
+
   function showWelcome() {
     currentId = null;
     titleEl.textContent = data.title || "UniServer Script API";
@@ -79,7 +87,7 @@
     currentId = sectionId;
     titleEl.textContent = sec.title;
     leadEl.textContent = sec.intro || "";
-    contentEl.innerHTML = sec.html;
+    contentEl.innerHTML = stripSectionChrome(sec.html);
     renderNav();
     if (updateHash) setHash(sectionId, anchor || null);
     if (anchor) {
