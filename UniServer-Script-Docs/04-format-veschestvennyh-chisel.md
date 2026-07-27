@@ -3,27 +3,30 @@
 Вещественные значения в весовой системе нельзя произвольно округлять: погрешность и дискрет весов задают допустимое представление массы. `SetFormatPrecision` округляет по числу знаков после запятой; `SetFormatRoundFromDiscret` сначала приводит значение к сетке дискрета, затем — к заданной точности. В ScriptsBunkerScale / ScriptsCraneScale любое значение массы перед записью в `Result_*` или журнал пропускают через `SetFormatPrecision(..., Massa_Precision)`.
 
 <a id="setformatprecision"></a>
-### `SetFormatPrecision`
 
-*** `SetFormatPrecision` — Округление по точности ****
+# `SetFormatPrecision` — Округление по точности
 
-`function SetFormatPrecision(Value: Double; Precision: Integer): Double`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: Double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Precision: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function SetFormatPrecision(Value: Double; Precision: Integer): Double
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `Double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Precision` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Вычисляет `round(Value * 10^Precision) / 10^Precision`. Округление `round(Value * 10^Precision) / 10^Precision` (fsCommon). В весовых Scripts* любое значение массы перед записью в Result_* / журнал пропускают через `SetFormatPrecision(..., Massa_Precision)`.
 
-- Вычисляет `round(Value * 10^Precision) / 10^Precision`.
-- Округление `round(Value * 10^Precision) / 10^Precision` (fsCommon).
-- В весовых Scripts* любое значение массы перед записью в Result_* / журнал пропускают через `SetFormatPrecision(..., Massa_Precision)`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -35,32 +38,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 <a id="setformatroundfromdiscret"></a>
-### `SetFormatRoundFromDiscret`
 
-*** `SetFormatRoundFromDiscret` — Округление по дискрету ****
+# `SetFormatRoundFromDiscret` — Округление по дискрету
 
-`function SetFormatRoundFromDiscret(Value: double; Precision: integer; Discret: double): Double`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Precision: integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Discret: double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function SetFormatRoundFromDiscret(Value: double; Precision: integer; Discret: double): Double
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Precision` | `integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Discret` | `double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Если `Discret < 0.00000001`, он заменяется на `0.00000001`. Вычисляет `SetFormatPrecision(round(Value / Discret) * Discret, Precision)`.
 
-- Если `Discret < 0.00000001`, он заменяется на `0.00000001`.
-- Вычисляет `SetFormatPrecision(round(Value / Discret) * Discret, Precision)`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -68,6 +75,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`

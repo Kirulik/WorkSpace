@@ -3,24 +3,29 @@
 Строковый слой API закрывает повседневную обработку текста в PascalScript: регистр, длина, поиск, замена и форматирование. Поиск `Pos` и замена `StringReplace` выполняются без учёта регистра — это нужно учитывать при сравнении кодов, номеров ТС и имён полей. Семейство `Format` / `FormatUtf8` / `FormatJson` / `FormatFloat` собирает строки для логов, HTTP-ответов и JSON. Строковые функции не «знают» о сервере — они готовят данные, которые затем уходят в `ReturnText`, сообщение или поле журнала.
 
 <a id="quotedstr"></a>
-### `QuotedStr`
 
-*** `QuotedStr` — Заключение строки в кавычки ****
+# `QuotedStr` — Заключение строки в кавычки
 
-`function QuotedStr(S: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function QuotedStr(S: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает строку в кавычках Pascal.
 
-- Возвращает строку в кавычках Pascal.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -31,29 +36,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="uppercase"></a>
-### `UpperCase`
 
-*** `UpperCase` — Верхний регистр ****
+# `UpperCase` — Верхний регистр
 
-`function UpperCase(S: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function UpperCase(S: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Переводит строку в верхний регистр.
 
-- Переводит строку в верхний регистр.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -61,29 +71,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="lowercase"></a>
-### `LowerCase`
 
-*** `LowerCase` — Нижний регистр ****
+# `LowerCase` — Нижний регистр
 
-`function LowerCase(S: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function LowerCase(S: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Переводит строку в нижний регистр.
 
-- Переводит строку в нижний регистр.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -91,29 +106,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="length"></a>
-### `Length`
 
-*** `Length` — Длина строки ****
+# `Length` — Длина строки
 
-`function Length(S: String): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Length(S: String): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает число символов в строке.
 
-- Возвращает число символов в строке.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -121,30 +141,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="pos"></a>
-### `Pos`
 
-*** `Pos` — Поиск подстроки ****
+# `Pos` — Поиск подстроки
 
-`function Pos(SubStr: String; Str: String): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `SubStr: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Str: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Pos(SubStr: String; Str: String): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `SubStr` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Str` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Используется регистронезависимый поиск `PosI`.
 
-- Используется регистронезависимый поиск `PosI`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -152,31 +177,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="stringreplace"></a>
-### `StringReplace`
 
-*** `StringReplace` — Замена подстрок ****
+# `StringReplace` — Замена подстрок
 
-`function StringReplace(const S, OldPattern, NewPattern: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `OldPattern: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NewPattern: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function StringReplace(const S, OldPattern, NewPattern: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `OldPattern` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NewPattern` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Используются флаги `rfReplaceAll` и `rfIgnoreCase`.
 
-- Используются флаги `rfReplaceAll` и `rfIgnoreCase`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -184,30 +214,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="format"></a>
-### `Format`
 
-*** `Format` — Форматирование строки ****
+# `Format` — Форматирование строки
 
-`function Format(Fmt: String; Args: array of Variant): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Fmt: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Args: array of Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Format(Fmt: String; Args: array of Variant): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Fmt` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Args` | `array of Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Собирает строку по шаблону и аргументам.
 
-- Собирает строку по шаблону и аргументам.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -215,30 +250,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="formatutf8"></a>
-### `FormatUtf8`
 
-*** `FormatUtf8` — Форматирование UTF-8 ****
+# `FormatUtf8` — Форматирование UTF-8
 
-`function FormatUtf8(Fmt: String; Args: array of Variant): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Fmt: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Args: array of Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function FormatUtf8(Fmt: String; Args: array of Variant): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Fmt` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Args` | `array of Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Форматирует строку с учётом UTF-8.
 
-- Форматирует строку с учётом UTF-8.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -246,30 +286,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="formatjson"></a>
-### `FormatJson`
 
-*** `FormatJson` — Форматирование для JSON ****
+# `FormatJson` — Форматирование для JSON
 
-`function FormatJson(Fmt: String; Args: array of Variant): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Fmt: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Args: array of Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function FormatJson(Fmt: String; Args: array of Variant): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Fmt` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Args` | `array of Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Форматирует строку для использования в JSON-контексте.
 
-- Форматирует строку для использования в JSON-контексте.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -277,30 +322,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="formatfloat"></a>
-### `FormatFloat`
 
-*** `FormatFloat` — Форматирование вещественного числа ****
+# `FormatFloat` — Форматирование вещественного числа
 
-`function FormatFloat(Fmt: String; Value: Double): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Fmt: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Value: Double` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function FormatFloat(Fmt: String; Value: Double): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Fmt` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Форматирует `Double` по заданному шаблону.
 
-- Форматирует `Double` по заданному шаблону.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -308,6 +358,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`

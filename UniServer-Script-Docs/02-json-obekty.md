@@ -3,24 +3,29 @@
 JSON — основной структурный формат данных в скриптах UniServer. Сообщения несут `Value` типа `Variant`, часто как JSON-объект; фильтры `GetRecords`, документы `SetRecord`, параметры `ReturnPage` и ответы страниц данных собираются через `_Obj` / `_Arr` / `_Json`. Функции `_ArrEx` / `_ObjEx` создают структуру сразу со значениями; `_Copy` копирует JSON через строковое представление. `QuotedStrJSON` и `EscapeJSON` готовят безопасные фрагменты для ручной сборки JSON-текста. После создания объекта доступны свойства и методы (`_Kind`, `_Count`, `AddValue`, `Exists` и др.). Правило платформы: сначала структура (`_Json` / `_Obj`), затем поля; обратно в текст — `_ToStr` или `ToString`.
 
 <a id="quotedstrjson"></a>
-### `QuotedStrJSON`
 
-*** `QuotedStrJSON` — Строка в кавычках JSON ****
+# `QuotedStrJSON` — Строка в кавычках JSON
 
-`function QuotedStrJSON(S: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function QuotedStrJSON(S: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Заключает строку в JSON-кавычки.
 
-- Заключает строку в JSON-кавычки.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -28,29 +33,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="escapejson"></a>
-### `EscapeJSON`
 
-*** `EscapeJSON` — Экранирование JSON ****
+# `EscapeJSON` — Экранирование JSON
 
-`function EscapeJSON(S: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function EscapeJSON(S: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Экранирует спецсимволы для JSON-строки.
 
-- Экранирует спецсимволы для JSON-строки.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -58,29 +68,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="arr"></a>
-### `_Arr`
 
-*** `_Arr` — Создание JSON-массива ****
+# `_Arr` — Создание JSON-массива
 
-`function _Arr: Variant`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function _Arr: Variant
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 переменная для хранения JSON-массива (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт переменную для хранения JSON-массива.
 
-- Создаёт переменную для хранения JSON-массива.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -92,29 +105,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="arrex"></a>
-### `_ArrEx`
 
-*** `_ArrEx` — Создание JSON-массива со значениями ****
+# `_ArrEx` — Создание JSON-массива со значениями
 
-`function _ArrEx(A: array of Variant): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `A: array of Variant` — массив начальных значений для JSON-массива (по EventScript_desc.odt)
+```pascal
+function _ArrEx(A: array of Variant): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `A` | `array of Variant` | массив начальных значений для JSON-массива (по EventScript_desc.odt) |
+
+## Описание
 
 JSON-массив с добавленными значениями (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт JSON-массив и добавляет переданные значения.
 
-- Создаёт JSON-массив и добавляет переданные значения.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -125,29 +143,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="obj"></a>
-### `_Obj`
 
-*** `_Obj` — Создание JSON-объекта ****
+# `_Obj` — Создание JSON-объекта
 
-`function _Obj: Variant`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function _Obj: Variant
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 переменная для хранения JSON-объекта (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт переменную для хранения JSON-объекта.
 
-- Создаёт переменную для хранения JSON-объекта.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -159,29 +180,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="objex"></a>
-### `_ObjEx`
 
-*** `_ObjEx` — Создание JSON-объекта с парами ****
+# `_ObjEx` — Создание JSON-объекта с парами
 
-`function _ObjEx(A: array of Variant): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `A: array of Variant` — пары имя–значение для JSON-объекта (по EventScript_desc.odt)
+```pascal
+function _ObjEx(A: array of Variant): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `A` | `array of Variant` | пары имя–значение для JSON-объекта (по EventScript_desc.odt) |
+
+## Описание
 
 JSON-объект с переданными парами имя–значение (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт JSON-объект из переданных пар имя—значение.
 
-- Создаёт JSON-объект из переданных пар имя—значение.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -192,29 +218,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="json"></a>
-### `_Json`
 
-*** `_Json` — Разбор JSON-строки ****
+# `_Json` — Разбор JSON-строки
 
-`function _Json(S: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — строка описания массива или объекта JSON (по EventScript_desc.odt)
+```pascal
+function _Json(S: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | строка описания массива или объекта JSON (по EventScript_desc.odt) |
+
+## Описание
 
 JSON-объект или JSON-массив, созданный из строки (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт JSON-объект или JSON-массив из строки описания.
 
-- Создаёт JSON-объект или JSON-массив из строки описания.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -225,29 +256,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="copy"></a>
-### `_Copy`
 
-*** `_Copy` — Копирование значения ****
+# `_Copy` — Копирование значения
 
-`function _Copy(V: Variant): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function _Copy(V: Variant): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** JSON-объект или JSON-массив копируется через его строковое представление; прочие значения возвращаются без такого копирования.
 
-- JSON-объект или JSON-массив копируется через его строковое представление; прочие значения возвращаются без такого копирования.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -259,31 +295,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 ## `JSON-объект / JSON-массив`: свойства и методы
 
 <a id="json-json-kind"></a>
-### `JSON-объект / JSON-массив._Kind`
 
-*** `JSON-объект / JSON-массив._Kind` — Тип JSON-переменной ****
+# `_Kind` — Тип JSON-переменной
 
-`property _Kind: TDocVariantKind`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+property _Kind: TDocVariantKind
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `TDocVariantKind` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает `dvObject` для объекта или `dvArray` для массива.
 
-- Возвращает `dvObject` для объекта или `dvArray` для массива.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -292,29 +331,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-count"></a>
-### `JSON-объект / JSON-массив._Count`
 
-*** `JSON-объект / JSON-массив._Count` — Количество элементов ****
+# `_Count` — Количество элементов
 
-`property _Count: Integer`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+property _Count: Integer
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает количество элементов массива или объекта.
 
-- Возвращает количество элементов массива или объекта.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -323,29 +365,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-name"></a>
-### `JSON-объект / JSON-массив.Name`
 
-*** `JSON-объект / JSON-массив.Name` — Имя элемента объекта ****
+# `Name` — Имя элемента объекта
 
-`function Name(Idx: Integer): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Idx: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Name(Idx: Integer): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает имя значения в объекте по индексу.
 
-- Возвращает имя значения в объекте по индексу.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -356,29 +403,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-value"></a>
-### `JSON-объект / JSON-массив.Value`
 
-*** `JSON-объект / JSON-массив.Value` — Значение элемента ****
+# `Value` — Значение элемента
 
-`function Value(Idx: Integer): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Idx: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Value(Idx: Integer): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает или задаёт значение в массиве либо объекте.
 
-- Возвращает или задаёт значение в массиве либо объекте.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -389,29 +441,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-exists"></a>
-### `JSON-объект / JSON-массив.Exists`
 
-*** `JSON-объект / JSON-массив.Exists` — Проверка существования ****
+# `Exists` — Проверка существования
 
-`function Exists(Name: String): Boolean`
+## Синтаксис
 
-**Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Exists(Name: String): Boolean
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Name` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Проверяет имя в объекте или значение в массиве.
 
-- Проверяет имя в объекте или значение в массиве.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -422,29 +479,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-add"></a>
-### `JSON-объект / JSON-массив.Add`
 
-*** `JSON-объект / JSON-массив.Add` — Добавление в массив ****
+# `Add` — Добавление в массив
 
-`function Add(V: Variant): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Add(V: Variant): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Добавляет значение в массив и возвращает его индекс.
 
-- Добавляет значение в массив и возвращает его индекс.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -455,30 +517,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-addvalue"></a>
-### `JSON-объект / JSON-массив.AddValue`
 
-*** `JSON-объект / JSON-массив.AddValue` — Добавление в объект ****
+# `AddValue` — Добавление в объект
 
-`function AddValue(Name: String; V: Variant): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `Name: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function AddValue(Name: String; V: Variant): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Name` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Добавляет имя и значение в объект и возвращает индекс.
 
-- Добавляет имя и значение в объект и возвращает индекс.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -489,29 +556,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-delete"></a>
-### `JSON-объект / JSON-массив.Delete`
 
-*** `JSON-объект / JSON-массив.Delete` — Удаление элемента ****
+# `Delete` — Удаление элемента
 
-`procedure Delete(Idx: Integer)`
+## Синтаксис
 
-**Входные параметры:**
-- `Idx: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+procedure Delete(Idx: Integer)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Удаляет элемент из массива или объекта.
 
-- Удаляет элемент из массива или объекта.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -520,29 +592,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 <a id="json-json-tostring"></a>
-### `JSON-объект / JSON-массив.ToString`
 
-*** `JSON-объект / JSON-массив.ToString` — Преобразование в строку ****
+# `ToString` — Преобразование в строку
 
-`function ToString: String`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function ToString: String
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Преобразует массив или объект в строку.
 
-- Преобразует массив или объект в строку.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -553,6 +628,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`

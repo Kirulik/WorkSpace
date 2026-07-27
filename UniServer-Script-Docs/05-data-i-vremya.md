@@ -3,24 +3,29 @@
 Время в UniServer — сквозной контракт между плагинами, журналами и веб-страницами. Обменный текстовый формат — ISO 8601 (`Iso8601ToDateTime` / `DateTimeToIso8601`). Функции интервалов (`SecondsBetween`, `MillisecondsBetween` и др.) измеряют давность события — типичный приём при таймаутах (в ScriptsCraneScale: `MillisecondsBetween(GetVarModTime('CurrentState'), Now())`). `NowPrecise` / `NowUTCPrecise` дают текущее время с высокой точностью; семейство `Inc*` сдвигает метку на заданный шаг.
 
 <a id="iso8601todatetime"></a>
-### `Iso8601ToDateTime`
 
-*** `Iso8601ToDateTime` — Разбор ISO 8601 ****
+# `Iso8601ToDateTime` — Разбор ISO 8601
 
-`function Iso8601ToDateTime(S: String): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `S: String` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function Iso8601ToDateTime(S: String): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Преобразует строку даты и времени формата ISO 8601 в `TDateTime`.
 
-- Преобразует строку даты и времени формата ISO 8601 в `TDateTime`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -30,29 +35,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="datetimetoiso8601"></a>
-### `DateTimeToIso8601`
 
-*** `DateTimeToIso8601` — Форматирование ISO 8601 ****
+# `DateTimeToIso8601` — Форматирование ISO 8601
 
-`function DateTimeToIso8601(D: TDateTime): String`
+## Синтаксис
 
-**Входные параметры:**
-- `D: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function DateTimeToIso8601(D: TDateTime): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `D` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Преобразует `TDateTime` в строку ISO 8601.
 
-- Преобразует `TDateTime` в строку ISO 8601.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -65,30 +75,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="secondsbetween"></a>
-### `SecondsBetween`
 
-*** `SecondsBetween` — Разница в секундах ****
+# `SecondsBetween` — Разница в секундах
 
-`function SecondsBetween(Now, Then: TDateTime): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `Now: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Then: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function SecondsBetween(Now, Then: TDateTime): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Now` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Количество секунд между двумя датами.
 
-- Количество секунд между двумя датами.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -99,30 +114,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="millisecondsbetween"></a>
-### `MillisecondsBetween`
 
-*** `MillisecondsBetween` — Разница в миллисекундах ****
+# `MillisecondsBetween` — Разница в миллисекундах
 
-`function MillisecondsBetween(Now, Then: TDateTime): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `Now: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Then: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function MillisecondsBetween(Now, Then: TDateTime): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Now` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Количество миллисекунд между двумя датами.
 
-- Количество миллисекунд между двумя датами.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -133,30 +153,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="minutesbetween"></a>
-### `MinutesBetween`
 
-*** `MinutesBetween` — Разница в минутах ****
+# `MinutesBetween` — Разница в минутах
 
-`function MinutesBetween(Now, Then: TDateTime): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `Now: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Then: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function MinutesBetween(Now, Then: TDateTime): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Now` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Количество минут между двумя датами.
 
-- Количество минут между двумя датами.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -167,30 +192,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="hoursbetween"></a>
-### `HoursBetween`
 
-*** `HoursBetween` — Разница в часах ****
+# `HoursBetween` — Разница в часах
 
-`function HoursBetween(Now, Then: TDateTime): Integer`
+## Синтаксис
 
-**Входные параметры:**
-- `Now: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `Then: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function HoursBetween(Now, Then: TDateTime): Integer
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Now` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Количество часов между двумя датами.
 
-- Количество часов между двумя датами.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -201,29 +231,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="nowprecise"></a>
-### `NowPrecise`
 
-*** `NowPrecise` — Текущее локальное время ****
+# `NowPrecise` — Текущее локальное время
 
-`function NowPrecise: TDateTime`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function NowPrecise: TDateTime
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает текущее локальное время с высокой точностью.
 
-- Возвращает текущее локальное время с высокой точностью.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -231,29 +264,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="nowutcprecise"></a>
-### `NowUTCPrecise`
 
-*** `NowUTCPrecise` — Текущее время UTC ****
+# `NowUTCPrecise` — Текущее время UTC
 
-`function NowUTCPrecise: TDateTime`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function NowUTCPrecise: TDateTime
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает текущее время UTC с высокой точностью.
 
-- Возвращает текущее время UTC с высокой точностью.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -261,30 +297,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="inchour"></a>
-### `IncHour`
 
-*** `IncHour` — Увеличение часов ****
+# `IncHour` — Увеличение часов
 
-`function IncHour(const Value: TDateTime; const NumberOfHours: Integer): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NumberOfHours: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IncHour(const Value: TDateTime; const NumberOfHours: Integer): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NumberOfHours` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Сдвигает `TDateTime` на заданное число часов.
 
-- Сдвигает `TDateTime` на заданное число часов.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -292,30 +333,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="incday"></a>
-### `IncDay`
 
-*** `IncDay` — Увеличение дней ****
+# `IncDay` — Увеличение дней
 
-`function IncDay(const Value: TDateTime; const NumberOfDays: Integer): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NumberOfDays: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IncDay(const Value: TDateTime; const NumberOfDays: Integer): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NumberOfDays` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Сдвигает `TDateTime` на заданное число дней.
 
-- Сдвигает `TDateTime` на заданное число дней.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -323,30 +369,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="incminute"></a>
-### `IncMinute`
 
-*** `IncMinute` — Увеличение минут ****
+# `IncMinute` — Увеличение минут
 
-`function IncMinute(const Value: TDateTime; const NumberOfDays: Integer): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NumberOfDays: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IncMinute(const Value: TDateTime; const NumberOfDays: Integer): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NumberOfDays` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMinute`.
 
-- Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMinute`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -354,30 +405,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="incsecond"></a>
-### `IncSecond`
 
-*** `IncSecond` — Увеличение секунд ****
+# `IncSecond` — Увеличение секунд
 
-`function IncSecond(const Value: TDateTime; const NumberOfDays: Integer): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NumberOfDays: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IncSecond(const Value: TDateTime; const NumberOfDays: Integer): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NumberOfDays` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncSecond`.
 
-- Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncSecond`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -385,30 +441,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="incmillisecond"></a>
-### `IncMilliSecond`
 
-*** `IncMilliSecond` — Увеличение миллисекунд ****
+# `IncMilliSecond` — Увеличение миллисекунд
 
-`function IncMilliSecond(const Value: TDateTime; const NumberOfDays: Integer): TDateTime`
+## Синтаксис
 
-**Входные параметры:**
-- `Value: TDateTime` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
-- `NumberOfDays: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IncMilliSecond(const Value: TDateTime; const NumberOfDays: Integer): TDateTime
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Value` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `NumberOfDays` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMilliSecond`.
 
-- Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMilliSecond`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -416,29 +477,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="ticksperiodtotext"></a>
-### `TicksPeriodToText`
 
-*** `TicksPeriodToText` — Период тиков в текст ****
+# `TicksPeriodToText` — Период тиков в текст
 
-`function TicksPeriodToText(const ATicks: Integer): String`
+## Синтаксис
 
-**Входные параметры:**
-- `ATicks: Integer` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function TicksPeriodToText(const ATicks: Integer): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `ATicks` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Преобразует период в тиках в текстовое представление.
 
-- Преобразует период в тиках в текстовое представление.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -446,6 +512,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`

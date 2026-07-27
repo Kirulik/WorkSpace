@@ -3,24 +3,29 @@
 Файловые функции позволяют скрипту читать и записывать текст относительно каталога плагина (`MyPath` из конфигурации ядра): относительный путь разрешается именно к нему. Это не замена универсальным журналам: для весовых и учётных записей платформа использует журналы и сообщения. Кодировка веб-страниц и шаблонов в UniServer — UTF-8.
 
 <a id="stringfromfile"></a>
-### `StringFromFile`
 
-*** `StringFromFile` — Чтение текста из файла ****
+# `StringFromFile` — Чтение текста из файла
 
-`function StringFromFile(FileName: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `FileName: String` — путь к файлу; относительный путь резолвится от MyPath (по `fsCoreScript.pas`)
+```pascal
+function StringFromFile(FileName: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `FileName` | `String` | путь к файлу; относительный путь резолвится от MyPath (по `fsCoreScript.pas`) |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Относительный путь разрешается относительно `MyPath`.
 
-- Относительный путь разрешается относительно `MyPath`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -31,30 +36,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="filefromstring"></a>
-### `FileFromString`
 
-*** `FileFromString` — Запись текста в файл ****
+# `FileFromString` — Запись текста в файл
 
-`procedure FileFromString(Content: String; FileName: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Content: String` — текст для записи в файл
-- `FileName: String` — путь к файлу; относительный путь резолвится от MyPath (по `fsCoreScript.pas`)
+```pascal
+procedure FileFromString(Content: String; FileName: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Content` | `String` | текст для записи в файл |
+| `FileName` | `String` | путь к файлу; относительный путь резолвится от MyPath (по `fsCoreScript.pas`) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Относительный путь разрешается относительно `MyPath`.
 
-- Относительный путь разрешается относительно `MyPath`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -62,6 +72,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`

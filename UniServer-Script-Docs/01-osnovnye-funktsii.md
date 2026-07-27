@@ -3,27 +3,30 @@
 Раздел объединяет базовые утилиты скриптового API, не привязанные к конкретной подсистеме сервера: безопасные преобразования `Variant`, проверку пустых значений, компактные GUID, короткую паузу `Sleep` и диагностический вывод `DebugLog` в лог плагина (`EventScript.log`). В UniServer почти все обменные значения (поля сообщений, параметры страниц, документы журналов, ответы веб-обработчиков) проходят через `Variant`, поэтому скрипт постоянно приводит данные к строке, числу или проверяет «пустоту» перед записью в журнал или отправкой сообщения. Функция `_ToStr` особенно важна для JSON-объектов и массивов (текстовое представление) и для дат (ISO 8601). `IsEmpty` / `VarIsEmptyOrNull` задают единый критерий «нет данных» для разных типов. `NewPackedGuid` / `IsPackedGuid` дают компактные идентификаторы записей и связей без ручной генерации.
 
 <a id="tostr"></a>
-### `_ToStr`
 
-*** `_ToStr` — Преобразование значения в строку ****
+# `_ToStr` — Преобразование значения в строку
 
-`function _ToStr(V: Variant; Format: Boolean = False): String`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — JSON-объект / JSON-массив или иное значение для преобразования в строку (по EventScript_desc.odt и `fsCommon.pas`)
-- `Format: Boolean = False` — выполнять ли форматирование (переводы строк, отступы) текста JSON при переводе в строку (по EventScript_desc.odt)
+```pascal
+function _ToStr(V: Variant; Format: Boolean = False): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | JSON-объект / JSON-массив или иное значение для преобразования в строку (по EventScript_desc.odt и `fsCommon.pas`) |
+| `Format` | `Boolean` | выполнять ли форматирование (переводы строк, отступы) текста JSON при переводе в строку (по EventScript_desc.odt) |
+
+## Описание
 
 строковое представление значения; для JSON — JSON-текст (по EventScript_desc.odt / `fsCommon.pas`)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Для JSON-объекта или JSON-массива возвращает его текстовое представление. При `Format = True` применяет `JsonReformat`. Для даты формирует ISO 8601 с разделителем `T` и миллисекундами.
 
-- Для JSON-объекта или JSON-массива возвращает его текстовое представление.
-- При `Format = True` применяет `JsonReformat`.
-- Для даты формирует ISO 8601 с разделителем `T` и миллисекундами.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -37,29 +40,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
 <a id="todouble"></a>
-### `ToDouble`
 
-*** `ToDouble` — Преобразование в `Double` ****
+# `ToDouble` — Преобразование в `Double`
 
-`function ToDouble(V: Variant): Double`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function ToDouble(V: Variant): Double
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Строковое значение преобразуется после удаления пробелов; остальные значения передаются стандартному преобразованию Variant.
 
-- Строковое значение преобразуется после удаления пробелов; остальные значения передаются стандартному преобразованию Variant.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -70,30 +78,32 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="newpackedguid"></a>
-### `NewPackedGuid`
 
-*** `NewPackedGuid` — Создание packed GUID ****
+# `NewPackedGuid` — Создание packed GUID
 
-`function NewPackedGuid: String`
+## Синтаксис
 
-**Входные параметры:**
+```pascal
+function NewPackedGuid: String
+```
+
+## Параметры
+
 _Параметры отсутствуют._
 
-**Возвращает:**
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Генерирует компактный идентификатор GUID. Генерирует компактный GUID; в Scripts* — `Result_DocId` / CODE операции до `SetRecord`.
 
-- Генерирует компактный идентификатор GUID.
-- Генерирует компактный GUID; в Scripts* — `Result_DocId` / CODE операции до `SetRecord`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -101,30 +111,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 <a id="ispackedguid"></a>
-### `IsPackedGuid`
 
-*** `IsPackedGuid` — Проверка packed GUID ****
+# `IsPackedGuid` — Проверка packed GUID
 
-`function IsPackedGuid(Guid: String): Boolean`
+## Синтаксис
 
-**Входные параметры:**
-- `Guid: String` — проверяемая строка
+```pascal
+function IsPackedGuid(Guid: String): Boolean
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Guid` | `String` | проверяемая строка |
+
+## Описание
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Проверяет, что строка соответствует формату packed GUID. Проверка формата packed GUID; в ScriptsJournal — идиома «есть живая ссылка» перед `GetRecord` / `SetLink*`.
 
-- Проверяет, что строка соответствует формату packed GUID.
-- Проверка формата packed GUID; в ScriptsJournal — идиома «есть живая ссылка» перед `GetRecord` / `SetLink*`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -134,29 +148,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="sleep"></a>
-### `Sleep`
 
-*** `Sleep` — Приостановка выполнения ****
+# `Sleep` — Приостановка выполнения
 
-`procedure Sleep(Milliseconds: Integer)`
+## Синтаксис
 
-**Входные параметры:**
-- `Milliseconds: Integer` — длительность паузы в миллисекундах; по `fsCommon.pas` ограничивается диапазоном 0…10000
+```pascal
+procedure Sleep(Milliseconds: Integer)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Milliseconds` | `Integer` | длительность паузы в миллисекундах; по `fsCommon.pas` ограничивается диапазоном 0…10000 |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Значение задержки ограничивается диапазоном от 0 до 10000 мс.
 
-- Значение задержки ограничивается диапазоном от 0 до 10000 мс.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -165,30 +184,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="isempty"></a>
-### `IsEmpty`
 
-*** `IsEmpty` — Проверка пустого значения ****
+# `IsEmpty` — Проверка пустого значения
 
-`function IsEmpty(V: Variant): Boolean`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function IsEmpty(V: Variant): Boolean
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Для JSON-массива или объекта проверяется `Count = 0`. Для строк проверяется `Length = 0`; для остальных значений используется `VarIsEmptyOrNull`.
 
-- Для JSON-массива или объекта проверяется `Count = 0`.
-- Для строк проверяется `Length = 0`; для остальных значений используется `VarIsEmptyOrNull`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -200,29 +223,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="varisemptyornull"></a>
-### `VarIsEmptyOrNull`
 
-*** `VarIsEmptyOrNull` — Проверка Empty или Null ****
+# `VarIsEmptyOrNull` — Проверка Empty или Null
 
-`function VarIsEmptyOrNull(V: Variant): Boolean`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — > <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI).
+```pascal
+function VarIsEmptyOrNull(V: Variant): Boolean
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+
+## Описание
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Вызывает `VarIsEmptyOrNull` для переданного Variant.
 
-- Вызывает `VarIsEmptyOrNull` для переданного Variant.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -233,31 +261,34 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCommon.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
 <a id="debuglog"></a>
-### `DebugLog`
 
-*** `DebugLog` — Вывод строки в лог файл плагина ****
+# `DebugLog` — Вывод строки в лог файл плагина
 
-`procedure DebugLog(V: Variant)`
+## Синтаксис
 
-**Входные параметры:**
-- `V: Variant` — параметр для вывода в лог файл (по примеру в `functions.txt`)
+```pascal
+procedure DebugLog(V: Variant)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `V` | `Variant` | параметр для вывода в лог файл (по примеру в `functions.txt`) |
+
+## Описание
 
 Процедура ничего не возвращает. (по примеру в `functions.txt` блок «Возвращает:» пуст)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Записывает указанное значение в `EventScript.log`. Пишет значение в лог плагина (`EventScript.log`). В Scripts* часто: `DebugLog('...' + _ToStr(ExceptionMessage))` в `except`.
 
-- Записывает указанное значение в `EventScript.log`.
-- Пишет значение в лог плагина (`EventScript.log`).
-- В Scripts* часто: `DebugLog('...' + _ToStr(ExceptionMessage))` в `except`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -268,6 +299,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/functions.txt`; `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/functions.txt`; `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`

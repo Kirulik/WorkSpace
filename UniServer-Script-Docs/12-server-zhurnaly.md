@@ -26,25 +26,30 @@
 
 
 <a id="getquery"></a>
-### `GetQuery`
 
-*** `GetQuery` — SQL-запрос к журналу ****
+# `GetQuery` — SQL-запрос к журналу
 
-`function GetQuery(Journal, SQL: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `SQL: String` — SQL-запрос; синтаксис SQLite; имя таблицы всегда Journal (по EventScript_desc.odt)
+```pascal
+function GetQuery(Journal, SQL: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (по EventScript_desc.odt) |
+| `SQL` | `String` | SQL-запрос; синтаксис SQLite; имя таблицы всегда Journal (по EventScript_desc.odt) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Использует SQLite; имя таблицы журнала всегда `Journal`.
 
-- Использует SQLite; имя таблицы журнала всегда `Journal`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -52,30 +57,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="getqueryex"></a>
-### `GetQueryEx`
 
-*** `GetQueryEx` — SQL-запрос к внешней БД ****
+# `GetQueryEx` — SQL-запрос к внешней БД
 
-`function GetQueryEx(Journal, SQL: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (по EventScript_desc.odt)
-- `SQL: String` — SQL-запрос к внешней БД; синтаксис внешней БД (по EventScript_desc.odt)
+```pascal
+function GetQueryEx(Journal, SQL: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (по EventScript_desc.odt) |
+| `SQL` | `String` | SQL-запрос к внешней БД; синтаксис внешней БД (по EventScript_desc.odt) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Выполняет запрос к внешней базе данных.
 
-- Выполняет запрос к внешней базе данных.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -83,30 +93,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="getrecord"></a>
-### `GetRecord`
 
-*** `GetRecord` — Чтение записи журнала ****
+# `GetRecord` — Чтение записи журнала
 
-`function GetRecord(Journal, Code: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (EventScript ODT; ScriptsJournal)
-- `Code: String` — идентификатор записи CODE (EventScript ODT; ScriptsJournal)
+```pascal
+function GetRecord(Journal, Code: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (EventScript ODT; ScriptsJournal) |
+| `Code` | `String` | идентификатор записи CODE (EventScript ODT; ScriptsJournal) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Получает запись по идентификатору `Code`.
 
-- Получает запись по идентификатору `Code`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -117,33 +132,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="getrecords"></a>
-### `GetRecords`
 
-*** `GetRecords` — Поиск записей журнала ****
+# `GetRecords` — Поиск записей журнала
 
-`function GetRecords(Journal: String; Args: Variant): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (EventScript ODT)
-- `Args: Variant` — объект: Filter (поля и операторы NotEqual/Range/OR), SortField, SortDesc, FirstRow, MaxRows (ScriptsJournal / ScriptsAutoControl)
+```pascal
+function GetRecords(Journal: String; Args: Variant): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (EventScript ODT) |
+| `Args` | `Variant` | объект: Filter (поля и операторы NotEqual/Range/OR), SortField, SortDesc, FirstRow, MaxRows (ScriptsJournal / ScriptsAutoControl) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** В `Args` используются поля `Filter`, `SortField`, `SortDesc`, `MaxRows`. В `Args` используются `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (ScriptsJournal / EventScript ODT). В `Filter` поддерживаются равенство полей, операторы `NotEqual`, `Range` (с `_ArrEx([from, to])`), вложенный `OR` через `_ObjEx` (ScriptsJournal, ScriptsAutoControl). Пустой результат удобно проверять как `_ToStr(Docs) <> '[]'` и/или `Docs._Count > 0` (ScriptsJournal).
 
-- В `Args` используются поля `Filter`, `SortField`, `SortDesc`, `MaxRows`.
-- В `Args` используются `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (ScriptsJournal / EventScript ODT).
-- В `Filter` поддерживаются равенство полей, операторы `NotEqual`, `Range` (с `_ArrEx([from, to])`), вложенный `OR` через `_ObjEx` (ScriptsJournal, ScriptsAutoControl).
-- Пустой результат удобно проверять как `_ToStr(Docs) <> '[]'` и/или `Docs._Count > 0` (ScriptsJournal).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -171,34 +188,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/Скрипты/ScriptsAutoControl`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 <a id="setrecord"></a>
-### `SetRecord`
 
-*** `SetRecord` — Сохранение записи журнала ****
+# `SetRecord` — Сохранение записи журнала
 
-`function SetRecord(Journal: String; Doc: Variant): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (EventScript ODT; ScriptsAutoControl)
-- `Doc: Variant` — документ записи (JSON-объект); часто содержит CODE (EventScript ODT; ScriptsAutoControl)
+```pascal
+function SetRecord(Journal: String; Doc: Variant): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (EventScript ODT; ScriptsAutoControl) |
+| `Doc` | `Variant` | документ записи (JSON-объект); часто содержит CODE (EventScript ODT; ScriptsAutoControl) |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Перед отправкой удаляет поле `DBID` из документа. Операция передаётся сообщением `Journal.Operation` через `SendMsg`. Возвращает код записи; в ScriptsAutoControl результат кладут в `Result_CODE` / `Msg.Result`. После сохранения часто вызывают `SetBlob(Journal, Code, Field, Blob)` для фото (ScriptsAutoControl / ScriptsCraneScale). Операция в реализации уходит через `Journal.Operation` / `SendMsg` (fsCoreScript).
 
-- Перед отправкой удаляет поле `DBID` из документа.
-- Операция передаётся сообщением `Journal.Operation` через `SendMsg`.
-- Возвращает код записи; в ScriptsAutoControl результат кладут в `Result_CODE` / `Msg.Result`.
-- После сохранения часто вызывают `SetBlob(Journal, Code, Field, Blob)` для фото (ScriptsAutoControl / ScriptsCraneScale).
-- Операция в реализации уходит через `Journal.Operation` / `SendMsg` (fsCoreScript).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -215,33 +233,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 <a id="setrecordnt"></a>
-### `SetRecordNT`
 
-*** `SetRecordNT` — Сохранение без триггеров ****
+# `SetRecordNT` — Сохранение без триггеров
 
-`function SetRecordNT(Journal: String; Doc: Variant): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (EventScript ODT; ScriptsJournal)
-- `Doc: Variant` — документ записи без запуска триггеров (ScriptsJournal)
+```pascal
+function SetRecordNT(Journal: String; Doc: Variant): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (EventScript ODT; ScriptsJournal) |
+| `Doc` | `Variant` | документ записи без запуска триггеров (ScriptsJournal) |
+
+## Описание
 
 результат операции записи; изменение выполняется без запуска триггеров (по EventScript_desc.odt)
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Выполняет изменение записи без запуска триггеров. Операция передаётся сообщением `Journal.Operation` через `SendMsg`. Без запуска триггеров журнала — для антирекурсии при каскадных правках (ScriptsJournal). Операция передаётся сообщением `Journal.Operation` через `SendMsg` (fsCoreScript).
 
-- Выполняет изменение записи без запуска триггеров.
-- Операция передаётся сообщением `Journal.Operation` через `SendMsg`.
-- Без запуска триггеров журнала — для антирекурсии при каскадных правках (ScriptsJournal).
-- Операция передаётся сообщением `Journal.Operation` через `SendMsg` (fsCoreScript).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -252,38 +272,41 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="getview"></a>
-### `GetView`
 
-*** `GetView` — Данные представления ****
+# `GetView` — Данные представления
 
-`function GetView(Journal, Name: String; Params, Filter: Variant; SortField: String; SortDesc: Boolean; FirstRow, MaxRows: Integer): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (EventScript ODT / RTTI)
-- `Name: String` — имя представления (EventScript ODT / RTTI)
-- `Params: Variant` — параметры представления (RTTI; уточнение семантики — по конфигурации журнала)
-- `Filter: Variant` — фильтр представления (RTTI)
-- `SortField: String` — поле сортировки (RTTI; как в GetRecords)
-- `SortDesc: Boolean` — сортировка по убыванию (RTTI)
-- `FirstRow: Integer` — смещение первой строки (RTTI; ScriptsJournal для GetRecords)
-- `MaxRows: Integer` — максимум строк (RTTI)
+```pascal
+function GetView(Journal, Name: String; Params, Filter: Variant; SortField: String; SortDesc: Boolean; FirstRow, MaxRows: Integer): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (EventScript ODT / RTTI) |
+| `Name` | `String` | имя представления (EventScript ODT / RTTI) |
+| `Params` | `Variant` | параметры представления (RTTI; уточнение семантики — по конфигурации журнала) |
+| `Filter` | `Variant` | фильтр представления (RTTI) |
+| `SortField` | `String` | поле сортировки (RTTI; как в GetRecords) |
+| `SortDesc` | `Boolean` | сортировка по убыванию (RTTI) |
+| `FirstRow` | `Integer` | смещение первой строки (RTTI; ScriptsJournal для GetRecords) |
+| `MaxRows` | `Integer` | максимум строк (RTTI) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Получает данные именованного представления журнала. В RTTI сигнатура: `Params`, `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (functions.txt). В EventScript ODT пример со старой сигнатурой `(Args, Params)` — ориентироваться на RTTI.
 
-- Получает данные именованного представления журнала.
-- В RTTI сигнатура: `Params`, `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (functions.txt).
-- В EventScript ODT пример со старой сигнатурой `(Args, Params)` — ориентироваться на RTTI.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -293,34 +316,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/functions.txt`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/functions.txt`
 
 <a id="execproc"></a>
-### `ExecProc`
 
-*** `ExecProc` — Хранимая процедура журнала ****
+# `ExecProc` — Хранимая процедура журнала
 
-`function ExecProc(Journal, Name: String; Args: Variant): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsJournal; EventScript ODT)
-- `Name: String` — имя процедуры без префикса Proc_ (ScriptsJournal: 'SetSlaveDoc')
-- `Args: Variant` — аргументы; в ScriptsJournal — объект `_ObjEx([...])`
+```pascal
+function ExecProc(Journal, Name: String; Args: Variant): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsJournal; EventScript ODT) |
+| `Name` | `String` | имя процедуры без префикса Proc_ (ScriptsJournal: 'SetSlaveDoc') |
+| `Args` | `Variant` | аргументы; в ScriptsJournal — объект `_ObjEx([...])` |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Выполняет хранимую процедуру журнала. Вызывает хранимую процедуру журнала; имя без префикса файла `Proc_` (файл `Proc_SetSlaveDoc` → `'SetSlaveDoc'`). В ScriptsJournal аргументы передают как `_ObjEx([...])`, не позиционный `_ArrEx` (пример ODT устарел относительно практики). Синхронный вызов из триггеров `OnBefore*` / процедур; для фона после update — `AsyncExecProc`.
 
-- Выполняет хранимую процедуру журнала.
-- Вызывает хранимую процедуру журнала; имя без префикса файла `Proc_` (файл `Proc_SetSlaveDoc` → `'SetSlaveDoc'`).
-- В ScriptsJournal аргументы передают как `_ObjEx([...])`, не позиционный `_ArrEx` (пример ODT устарел относительно практики).
-- Синхронный вызов из триггеров `OnBefore*` / процедур; для фона после update — `AsyncExecProc`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 var
@@ -333,31 +358,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="getblobs"></a>
-### `GetBlobs`
 
-*** `GetBlobs` — Список вложений записи ****
+# `GetBlobs` — Список вложений записи
 
-`function GetBlobs(Journal, Code: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI / Scripts*)
-- `Code: String` — CODE записи (RTTI / Scripts*)
+```pascal
+function GetBlobs(Journal, Code: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI / Scripts*) |
+| `Code` | `String` | CODE записи (RTTI / Scripts*) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает вложения (blob) записи журнала. Возвращает набор вложений записи журнала по CODE.
 
-- Возвращает вложения (blob) записи журнала.
-- Возвращает набор вложений записи журнала по CODE.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -365,32 +394,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="getblob"></a>
-### `GetBlob`
 
-*** `GetBlob` — Чтение вложения ****
+# `GetBlob` — Чтение вложения
 
-`function GetBlob(Journal, Code, Name: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsAutoControl / RTTI)
-- `Code: String` — CODE записи (ScriptsAutoControl / RTTI)
-- `Name: String` — имя поля вложения, например PHOTO1 (ScriptsAutoControl)
+```pascal
+function GetBlob(Journal, Code, Name: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsAutoControl / RTTI) |
+| `Code` | `String` | CODE записи (ScriptsAutoControl / RTTI) |
+| `Name` | `String` | имя поля вложения, например PHOTO1 (ScriptsAutoControl) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Читает именованное вложение записи. Читает именованное вложение записи по журналу, CODE и имени поля (зеркало `SetBlob` в ScriptsAutoControl).
 
-- Читает именованное вложение записи.
-- Читает именованное вложение записи по журналу, CODE и имени поля (зеркало `SetBlob` в ScriptsAutoControl).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -399,34 +432,37 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
 <a id="setblob"></a>
-### `SetBlob`
 
-*** `SetBlob` — Запись вложения ****
+# `SetBlob` — Запись вложения
 
-`procedure SetBlob(Journal, Code, Name: String; Blob: Variant)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsAutoControl)
-- `Code: String` — CODE записи (ScriptsAutoControl)
-- `Name: String` — имя поля вложения, например PHOTO1 (ScriptsAutoControl)
-- `Blob: Variant` — данные вложения; писать после проверки not IsEmpty (ScriptsAutoControl)
+```pascal
+procedure SetBlob(Journal, Code, Name: String; Blob: Variant)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsAutoControl) |
+| `Code` | `String` | CODE записи (ScriptsAutoControl) |
+| `Name` | `String` | имя поля вложения, например PHOTO1 (ScriptsAutoControl) |
+| `Blob` | `Variant` | данные вложения; писать после проверки not IsEmpty (ScriptsAutoControl) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Сохраняет именованное вложение записи. Пишет именованное вложение записи после `SetRecord`; перед вызовом проверяют `not IsEmpty(Blob)` (ScriptsAutoControl). Аргументы: журнал, CODE записи, имя поля (например `PHOTO1`), данные blob.
 
-- Сохраняет именованное вложение записи.
-- Пишет именованное вложение записи после `SetRecord`; перед вызовом проверяют `not IsEmpty(Blob)` (ScriptsAutoControl).
-- Аргументы: журнал, CODE записи, имя поля (например `PHOTO1`), данные blob.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -436,37 +472,40 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
 <a id="setlink"></a>
-### `SetLink`
 
-*** `SetLink` — Создание связи ****
+# `SetLink` — Создание связи
 
-`function SetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — журнал исходной записи (ScriptsJournal)
-- `Code: String` — CODE исходной записи (ScriptsJournal)
-- `Name: String` — имя/ключ связи, например DOC1 (ScriptsJournal)
-- `Caption: String` — отображаемое имя связи, например «Документ» (ScriptsJournal)
-- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
-- `LinkType: String` — тип связи: SLAVE / MASTER / LINK (ScriptsJournal)
-- `Link: String` — CODE связанной записи (ScriptsJournal)
+```pascal
+function SetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | журнал исходной записи (ScriptsJournal) |
+| `Code` | `String` | CODE исходной записи (ScriptsJournal) |
+| `Name` | `String` | имя/ключ связи, например DOC1 (ScriptsJournal) |
+| `Caption` | `String` | отображаемое имя связи, например «Документ» (ScriptsJournal) |
+| `LinkJournal` | `String` | журнал связанной записи (ScriptsJournal) |
+| `LinkType` | `String` | тип связи: SLAVE / MASTER / LINK (ScriptsJournal) |
+| `Link` | `String` | CODE связанной записи (ScriptsJournal) |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт связь записи с другой записью/журналом. Создаёт связь записи с записью другого (или того же) журнала **с** запуском триггеров. В ScriptsJournal чаще `SetLinkNT`; аргументы те же: `LinkType` = `SLAVE` / `MASTER` / `LINK`.
 
-- Создаёт связь записи с другой записью/журналом.
-- Создаёт связь записи с записью другого (или того же) журнала **с** запуском триггеров.
-- В ScriptsJournal чаще `SetLinkNT`; аргументы те же: `LinkType` = `SLAVE` / `MASTER` / `LINK`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -476,37 +515,40 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="setlinknt"></a>
-### `SetLinkNT`
 
-*** `SetLinkNT` — Создание связи без триггеров ****
+# `SetLinkNT` — Создание связи без триггеров
 
-`function SetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — журнал исходной записи (ScriptsJournal)
-- `Code: String` — CODE исходной записи (ScriptsJournal)
-- `Name: String` — имя/ключ связи (ScriptsJournal)
-- `Caption: String` — подпись связи (ScriptsJournal)
-- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
-- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
-- `Link: String` — CODE связанной записи (ScriptsJournal)
+```pascal
+function SetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | журнал исходной записи (ScriptsJournal) |
+| `Code` | `String` | CODE исходной записи (ScriptsJournal) |
+| `Name` | `String` | имя/ключ связи (ScriptsJournal) |
+| `Caption` | `String` | подпись связи (ScriptsJournal) |
+| `LinkJournal` | `String` | журнал связанной записи (ScriptsJournal) |
+| `LinkType` | `String` | SLAVE / MASTER / LINK (ScriptsJournal) |
+| `Link` | `String` | CODE связанной записи (ScriptsJournal) |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Создаёт связь без запуска триггеров. Как `SetLink`, но без запуска триггеров — типичный вызов из `OnAfterUpdate` (ScriptsJournal). Пример: `SetLinkNT(JournalName, CODE, 'DOC1', 'Документ', 'DocsJournal', 'SLAVE', Doc_Link)`.
 
-- Создаёт связь без запуска триггеров.
-- Как `SetLink`, но без запуска триггеров — типичный вызов из `OnAfterUpdate` (ScriptsJournal).
-- Пример: `SetLinkNT(JournalName, CODE, 'DOC1', 'Документ', 'DocsJournal', 'SLAVE', Doc_Link)`.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -519,32 +561,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="getlink"></a>
-### `GetLink`
 
-*** `GetLink` — Чтение связи ****
+# `GetLink` — Чтение связи
 
-`function GetLink(Journal, Code, Name: String): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи (RTTI)
-- `Name: String` — имя связи (RTTI)
+```pascal
+function GetLink(Journal, Code, Name: String): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи (RTTI) |
+| `Name` | `String` | имя связи (RTTI) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает данные связи по имени. Возвращает данные связи по имени (`Name`, как в `SetLink*`).
 
-- Возвращает данные связи по имени.
-- Возвращает данные связи по имени (`Name`, как в `SetLink*`).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -552,32 +598,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="getlink-link"></a>
-### `GetLink_Link`
 
-*** `GetLink_Link` — Идентификатор связанной записи ****
+# `GetLink_Link` — Идентификатор связанной записи
 
-`function GetLink_Link(Journal, Code, Name: String): String`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи (RTTI)
-- `Name: String` — имя связи (RTTI)
+```pascal
+function GetLink_Link(Journal, Code, Name: String): String
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи (RTTI) |
+| `Name` | `String` | имя связи (RTTI) |
+
+## Описание
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает строковый идентификатор связи. Возвращает строковый CODE связанной записи по имени связи.
 
-- Возвращает строковый идентификатор связи.
-- Возвращает строковый CODE связанной записи по имени связи.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -585,32 +635,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="getlinks"></a>
-### `GetLinks`
 
-*** `GetLinks` — Список связей ****
+# `GetLinks` — Список связей
 
-`function GetLinks(Journal, Code: String; MaxRows: Integer): Variant`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи (RTTI)
-- `MaxRows: Integer` — ограничение числа связей (RTTI)
+```pascal
+function GetLinks(Journal, Code: String; MaxRows: Integer): Variant
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи (RTTI) |
+| `MaxRows` | `Integer` | ограничение числа связей (RTTI) |
+
+## Описание
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Возвращает связи записи. Возвращает список связей записи (`MaxRows` ограничивает выборку).
 
-- Возвращает связи записи.
-- Возвращает список связей записи (`MaxRows` ограничивает выборку).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -618,32 +672,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="deletelinks"></a>
-### `DeleteLinks`
 
-*** `DeleteLinks` — Удаление связей ****
+# `DeleteLinks` — Удаление связей
 
-`procedure DeleteLinks(Journal, Code, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи или пусто для обратных (ScriptsJournal для NT)
-- `Link: String` — CODE связанной записи или пусто для всех исходящих (ScriptsJournal для NT)
+```pascal
+procedure DeleteLinks(Journal, Code, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи или пусто для обратных (ScriptsJournal для NT) |
+| `Link` | `String` | CODE связанной записи или пусто для всех исходящих (ScriptsJournal для NT) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Удаляет связи записи. Удаляет связи записи **с** триггерами; семантика пустых Code/Link — как у `DeleteLinksNT` (ScriptsJournal).
 
-- Удаляет связи записи.
-- Удаляет связи записи **с** триггерами; семантика пустых Code/Link — как у `DeleteLinksNT` (ScriptsJournal).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -653,32 +711,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="undeletelinks"></a>
-### `UnDeleteLinks`
 
-*** `UnDeleteLinks` — Восстановление связей ****
+# `UnDeleteLinks` — Восстановление связей
 
-`procedure UnDeleteLinks(Journal, Code, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи (RTTI)
-- `Link: String` — CODE связанной записи (RTTI)
+```pascal
+procedure UnDeleteLinks(Journal, Code, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи (RTTI) |
+| `Link` | `String` | CODE связанной записи (RTTI) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Восстанавливает удалённые связи. Восстанавливает удалённые связи записи (с триггерами).
 
-- Восстанавливает удалённые связи.
-- Восстанавливает удалённые связи записи (с триггерами).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -686,33 +748,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="deletelinksnt"></a>
-### `DeleteLinksNT`
 
-*** `DeleteLinksNT` — Удаление связей без триггеров ****
+# `DeleteLinksNT` — Удаление связей без триггеров
 
-`procedure DeleteLinksNT(Journal, Code, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsJournal)
-- `Code: String` — CODE записи; пустая строка — режим «все входящие на Link» (ScriptsJournal)
-- `Link: String` — CODE связанной записи; пустая строка — все исходящие с Code (ScriptsJournal)
+```pascal
+procedure DeleteLinksNT(Journal, Code, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsJournal) |
+| `Code` | `String` | CODE записи; пустая строка — режим «все входящие на Link» (ScriptsJournal) |
+| `Link` | `String` | CODE связанной записи; пустая строка — все исходящие с Code (ScriptsJournal) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Удаляет связи без запуска триггеров. Удаление связей без триггеров (ScriptsJournal). `DeleteLinksNT(J, CODE, '')` — все исходящие с записи; `DeleteLinksNT(J, '', CODE)` — все входящие на запись; оба аргумента заданы — одна пара.
 
-- Удаляет связи без запуска триггеров.
-- Удаление связей без триггеров (ScriptsJournal).
-- `DeleteLinksNT(J, CODE, '')` — все исходящие с записи; `DeleteLinksNT(J, '', CODE)` — все входящие на запись; оба аргумента заданы — одна пара.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -722,32 +787,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="undeletelinksnt"></a>
-### `UnDeleteLinksNT`
 
-*** `UnDeleteLinksNT` — Восстановление связей без триггеров ****
+# `UnDeleteLinksNT` — Восстановление связей без триггеров
 
-`procedure UnDeleteLinksNT(Journal, Code, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (RTTI)
-- `Code: String` — CODE записи (RTTI)
-- `Link: String` — CODE связанной записи (RTTI)
+```pascal
+procedure UnDeleteLinksNT(Journal, Code, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (RTTI) |
+| `Code` | `String` | CODE записи (RTTI) |
+| `Link` | `String` | CODE связанной записи (RTTI) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Восстанавливает связи без запуска триггеров. Восстановление связей без запуска триггеров.
 
-- Восстанавливает связи без запуска триггеров.
-- Восстановление связей без запуска триггеров.
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -755,31 +824,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="asyncsetrecord"></a>
-### `AsyncSetRecord`
 
-*** `AsyncSetRecord` — Асинхронное сохранение записи ****
+# `AsyncSetRecord` — Асинхронное сохранение записи
 
-`procedure AsyncSetRecord(Journal: String; Doc: Variant)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsJournal)
-- `Doc: Variant` — документ для асинхронного сохранения с триггерами (ScriptsJournal)
+```pascal
+procedure AsyncSetRecord(Journal: String; Doc: Variant)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsJournal) |
+| `Doc` | `Variant` | документ для асинхронного сохранения с триггерами (ScriptsJournal) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Ставит сохранение записи в очередь сообщений. Асинхронное сохранение **с** триггерами — чтобы уведомить связанные плагины (ScriptsJournal `SetSlaveDoc`).
 
-- Ставит сохранение записи в очередь сообщений.
-- Асинхронное сохранение **с** триггерами — чтобы уведомить связанные плагины (ScriptsJournal `SetSlaveDoc`).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -790,31 +863,35 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="asyncsetrecordnt"></a>
-### `AsyncSetRecordNT`
 
-*** `AsyncSetRecordNT` — Асинхронное сохранение без триггеров ****
+# `AsyncSetRecordNT` — Асинхронное сохранение без триггеров
 
-`procedure AsyncSetRecordNT(Journal: String; Doc: Variant)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsJournal)
-- `Doc: Variant` — документ для асинхронного сохранения без триггеров (ScriptsJournal)
+```pascal
+procedure AsyncSetRecordNT(Journal: String; Doc: Variant)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsJournal) |
+| `Doc` | `Variant` | документ для асинхронного сохранения без триггеров (ScriptsJournal) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Асинхронное сохранение без запуска триггеров. Асинхронное сохранение без триггеров — массовые правки пары отвесов без рекурсии (ScriptsJournal).
 
-- Асинхронное сохранение без запуска триггеров.
-- Асинхронное сохранение без триггеров — массовые правки пары отвесов без рекурсии (ScriptsJournal).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -824,32 +901,36 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="asyncexecproc"></a>
-### `AsyncExecProc`
 
-*** `AsyncExecProc` — Асинхронный вызов процедуры ****
+# `AsyncExecProc` — Асинхронный вызов процедуры
 
-`procedure AsyncExecProc(Journal, Name: String; Args: Variant)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — имя журнала (ScriptsJournal)
-- `Name: String` — имя процедуры без префикса Proc_ (ScriptsJournal)
-- `Args: Variant` — аргументы процедуры (обычно `_ObjEx` / документ, ScriptsJournal)
+```pascal
+procedure AsyncExecProc(Journal, Name: String; Args: Variant)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | имя журнала (ScriptsJournal) |
+| `Name` | `String` | имя процедуры без префикса Proc_ (ScriptsJournal) |
+| `Args` | `Variant` | аргументы процедуры (обычно `_ObjEx` / документ, ScriptsJournal) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Ставит выполнение хранимой процедуры в очередь. Асинхронный вызов хранимой процедуры (не блокирует `OnAfterUpdate`, ScriptsJournal).
 
-- Ставит выполнение хранимой процедуры в очередь.
-- Асинхронный вызов хранимой процедуры (не блокирует `OnAfterUpdate`, ScriptsJournal).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -859,36 +940,40 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
 <a id="asyncsetlink"></a>
-### `AsyncSetLink`
 
-*** `AsyncSetLink` — Асинхронное создание связи ****
+# `AsyncSetLink` — Асинхронное создание связи
 
-`procedure AsyncSetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — журнал исходной записи (RTTI / ScriptsJournal)
-- `Code: String` — CODE исходной записи
-- `Name: String` — имя связи
-- `Caption: String` — подпись связи
-- `LinkJournal: String` — журнал связанной записи
-- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
-- `Link: String` — CODE связанной записи
+```pascal
+procedure AsyncSetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | журнал исходной записи (RTTI / ScriptsJournal) |
+| `Code` | `String` | CODE исходной записи |
+| `Name` | `String` | имя связи |
+| `Caption` | `String` | подпись связи |
+| `LinkJournal` | `String` | журнал связанной записи |
+| `LinkType` | `String` | SLAVE / MASTER / LINK (ScriptsJournal) |
+| `Link` | `String` | CODE связанной записи |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Ставит создание связи в очередь сообщений. Асинхронное создание связи с триггерами; аргументы как у `AsyncSetLinkNT` (ScriptsJournal).
 
-- Ставит создание связи в очередь сообщений.
-- Асинхронное создание связи с триггерами; аргументы как у `AsyncSetLinkNT` (ScriptsJournal).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -898,36 +983,40 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
 
 <a id="asyncsetlinknt"></a>
-### `AsyncSetLinkNT`
 
-*** `AsyncSetLinkNT` — Асинхронная связь без триггеров ****
+# `AsyncSetLinkNT` — Асинхронная связь без триггеров
 
-`procedure AsyncSetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)`
+## Синтаксис
 
-**Входные параметры:**
-- `Journal: String` — журнал исходной записи (ScriptsJournal)
-- `Code: String` — CODE исходной записи (ScriptsJournal)
-- `Name: String` — имя связи (ScriptsJournal)
-- `Caption: String` — подпись связи (ScriptsJournal)
-- `LinkJournal: String` — журнал связанной записи (ScriptsJournal)
-- `LinkType: String` — SLAVE / MASTER / LINK (ScriptsJournal)
-- `Link: String` — CODE связанной записи (ScriptsJournal)
+```pascal
+procedure AsyncSetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: String)
+```
 
-**Возвращает:**
+## Параметры
+
+| Параметр | Тип | Описание |
+|:--|:--|:--|
+| `Journal` | `String` | журнал исходной записи (ScriptsJournal) |
+| `Code` | `String` | CODE исходной записи (ScriptsJournal) |
+| `Name` | `String` | имя связи (ScriptsJournal) |
+| `Caption` | `String` | подпись связи (ScriptsJournal) |
+| `LinkJournal` | `String` | журнал связанной записи (ScriptsJournal) |
+| `LinkType` | `String` | SLAVE / MASTER / LINK (ScriptsJournal) |
+| `Link` | `String` | CODE связанной записи (ScriptsJournal) |
+
+## Описание
 
 _Процедура ничего не возвращает._
 
-**Сведения из исходников / ODT:**
+> **Особенности:** Асинхронное создание связи без триггеров. Асинхронное создание связи без триггеров (ScriptsJournal `Proc_SetSlaveDoc`).
 
-- Асинхронное создание связи без триггеров.
-- Асинхронное создание связи без триггеров (ScriptsJournal `Proc_SetSlaveDoc`).
-
-**Пример вызова:**
+<details>
+<summary><strong>Пример реализации</strong></summary>
 
 ```pascal
 begin
@@ -936,6 +1025,6 @@ begin
 end
 ```
 
-_Источник сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+</details>
 
----
+_Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
