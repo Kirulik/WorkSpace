@@ -23,9 +23,7 @@ function HexToCRC8SumMod2(SourceStr: String; AIndex, Count: integer; FirstByte: 
 
 ## Описание
 
-CRC8 в hex.
-
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
+Возвращает CRC8 (hex, 2 символа) по алгоритму суммы по модулю 2 для данных в hex. Проверка целостности пакета устройства.
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
 
@@ -65,9 +63,7 @@ function HexToCRC8Sum(SourceStr: String; AIndex, ACount: integer; FirstByte: byt
 
 ## Описание
 
-CRC8 в hex.
-
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
+Возвращает CRC8 (hex, 2 символа) по алгоритму простой суммы для данных в hex.
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
 
@@ -110,9 +106,7 @@ function HexToCRC8Polinom(SourceStr: String; AIndex, ACount: integer; Poly, Init
 
 ## Описание
 
-CRC8 по полиному.
-
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
+Возвращает CRC8 (hex, 2 символа), посчитанный по заданному полиному для данных в hex.
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
 
@@ -156,9 +150,7 @@ function HexToCRC16Polinom(SourceStr: String; AIndex, ACount: integer; Poly, Ini
 
 ## Описание
 
-CRC16 по полиному.
-
-Значение типа `String` (тип подтверждён сигнатурой RTTI).
+Возвращает CRC16 (hex, 4 символа), посчитанный по заданному полиному для данных в hex.
 
 > **Особенности:** Результат CRC16 представлен hex-строкой из 4 символов.
 
