@@ -1,6 +1,6 @@
-# Отправка сообщений
+# Сервер. Отправка сообщений
 
-Сообщения — шина взаимодействия плагинов и ядра UniServer. Имя имеет вид `ИмяПлагина.ИмяСообщения`; в ScriptsAutoControl / BunkerScale / CraneScale команду почти всегда собирают как `PluginName + '.Command'` (например `PluginName + '.FindPassDoc'`). У сообщения есть `Value` (`Variant`), опциональный `Blob`, метка времени и признак устаревания. `NewMessage` / `NewMessageEx` создают объект; `PostMsg` ставит в очередь асинхронно (FixPhoto, SaveRecord, Enable — fire-and-forget); `SendMsg` ждёт обработки до `Timeout` мс и возвращает поле `Result`. В cmd-скриптах ответ кладут в **`Msg.Result`**; снаружи его читают как значение `SendMsg(...)`. Обработчики работают в потоках ядра. Через эту же шину уходят операции журналов (`Journal.Operation`) и системные события вроде `Core.ServerStarted`.
+Сообщения — шина взаимодействия плагинов и ядра UniServer. Имя имеет вид `ИмяПлагина.ИмяСообщения`; в Scripts* команду почти всегда собирают как `PluginName + '.Command'`. У сообщения есть `Value` (`Variant`), опциональный `Blob`, метка времени и признак устаревания. `NewMessage` / `NewMessageEx` создают объект; `PostMsg` ставит в очередь асинхронно; `SendMsg` ждёт обработки до `Timeout` мс и возвращает поле `Result`. В cmd-скриптах ответ кладут в `Msg.Result`. Через эту же шину уходят операции журналов (`Journal.Operation`).
 
 <a id="newmessage"></a>
 ### `NewMessage`
