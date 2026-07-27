@@ -44,6 +44,8 @@ function GetQuery(Journal, SQL: String): Variant
 
 ## Описание
 
+SQL-запрос к журналу.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Использует SQLite; имя таблицы журнала всегда `Journal`.
@@ -60,6 +62,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="getqueryex"></a>
 
@@ -80,6 +84,8 @@ function GetQueryEx(Journal, SQL: String): Variant
 
 ## Описание
 
+SQL-запрос к внешней БД.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Выполняет запрос к внешней базе данных.
@@ -96,6 +102,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="getrecord"></a>
 
@@ -115,6 +123,8 @@ function GetRecord(Journal, Code: String): Variant
 | `Code` | `String` | идентификатор записи CODE (EventScript ODT; ScriptsJournal) |
 
 ## Описание
+
+Чтение записи журнала.
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
@@ -136,6 +146,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="getrecords"></a>
 
 # `GetRecords` — Поиск записей журнала
@@ -154,6 +166,8 @@ function GetRecords(Journal: String; Args: Variant): Variant
 | `Args` | `Variant` | объект: Filter (поля и операторы NotEqual/Range/OR), SortField, SortDesc, FirstRow, MaxRows (ScriptsJournal / ScriptsAutoControl) |
 
 ## Описание
+
+Поиск записей журнала.
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
@@ -192,6 +206,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/Скрипты/ScriptsAutoControl`
 
+---
+
 <a id="setrecord"></a>
 
 # `SetRecord` — Сохранение записи журнала
@@ -210,6 +226,8 @@ function SetRecord(Journal: String; Doc: Variant): String
 | `Doc` | `Variant` | документ записи (JSON-объект); часто содержит CODE (EventScript ODT; ScriptsAutoControl) |
 
 ## Описание
+
+Сохранение записи журнала.
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
@@ -237,6 +255,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
+---
+
 <a id="setrecordnt"></a>
 
 # `SetRecordNT` — Сохранение без триггеров
@@ -255,6 +275,8 @@ function SetRecordNT(Journal: String; Doc: Variant): String
 | `Doc` | `Variant` | документ записи без запуска триггеров (ScriptsJournal) |
 
 ## Описание
+
+Сохранение без триггеров.
 
 результат операции записи; изменение выполняется без запуска триггеров (по EventScript_desc.odt)
 
@@ -275,6 +297,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="getview"></a>
 
@@ -301,6 +325,8 @@ function GetView(Journal, Name: String; Params, Filter: Variant; SortField: Stri
 
 ## Описание
 
+Данные представления.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Получает данные именованного представления журнала. В RTTI сигнатура: `Params`, `Filter`, `SortField`, `SortDesc`, `FirstRow`, `MaxRows` (functions.txt). В EventScript ODT пример со старой сигнатурой `(Args, Params)` — ориентироваться на RTTI.
@@ -319,6 +345,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/functions.txt`
+
+---
 
 <a id="execproc"></a>
 
@@ -339,6 +367,8 @@ function ExecProc(Journal, Name: String; Args: Variant): Variant
 | `Args` | `Variant` | аргументы; в ScriptsJournal — объект `_ObjEx([...])` |
 
 ## Описание
+
+Хранимая процедура журнала.
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
@@ -362,6 +392,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/Скрипты/ScriptsJournal`
 
+---
+
 <a id="getblobs"></a>
 
 # `GetBlobs` — Список вложений записи
@@ -381,6 +413,8 @@ function GetBlobs(Journal, Code: String): Variant
 
 ## Описание
 
+Список вложений записи.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает вложения (blob) записи журнала. Возвращает набор вложений записи журнала по CODE.
@@ -397,6 +431,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="getblob"></a>
 
@@ -418,6 +454,8 @@ function GetBlob(Journal, Code, Name: String): Variant
 
 ## Описание
 
+Чтение вложения.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Читает именованное вложение записи. Читает именованное вложение записи по журналу, CODE и имени поля (зеркало `SetBlob` в ScriptsAutoControl).
@@ -435,6 +473,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsAutoControl`
+
+---
 
 <a id="setblob"></a>
 
@@ -457,6 +497,8 @@ procedure SetBlob(Journal, Code, Name: String; Blob: Variant)
 
 ## Описание
 
+Запись вложения.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Сохраняет именованное вложение записи. Пишет именованное вложение записи после `SetRecord`; перед вызовом проверяют `not IsEmpty(Blob)` (ScriptsAutoControl). Аргументы: журнал, CODE записи, имя поля (например `PHOTO1`), данные blob.
@@ -475,6 +517,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsAutoControl`; `Материалы для документации/Скрипты/ScriptsCraneScale`
+
+---
 
 <a id="setlink"></a>
 
@@ -500,6 +544,8 @@ function SetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: Stri
 
 ## Описание
 
+Создание связи.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Создаёт связь записи с другой записью/журналом. Создаёт связь записи с записью другого (или того же) журнала **с** запуском триггеров. В ScriptsJournal чаще `SetLinkNT`; аргументы те же: `LinkType` = `SLAVE` / `MASTER` / `LINK`.
@@ -518,6 +564,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="setlinknt"></a>
 
@@ -543,6 +591,8 @@ function SetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Link: St
 
 ## Описание
 
+Создание связи без триггеров.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Создаёт связь без запуска триггеров. Как `SetLink`, но без запуска триггеров — типичный вызов из `OnAfterUpdate` (ScriptsJournal). Пример: `SetLinkNT(JournalName, CODE, 'DOC1', 'Документ', 'DocsJournal', 'SLAVE', Doc_Link)`.
@@ -565,6 +615,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
+---
+
 <a id="getlink"></a>
 
 # `GetLink` — Чтение связи
@@ -585,6 +637,8 @@ function GetLink(Journal, Code, Name: String): Variant
 
 ## Описание
 
+Чтение связи.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает данные связи по имени. Возвращает данные связи по имени (`Name`, как в `SetLink*`).
@@ -601,6 +655,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="getlink-link"></a>
 
@@ -622,6 +678,8 @@ function GetLink_Link(Journal, Code, Name: String): String
 
 ## Описание
 
+Идентификатор связанной записи.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает строковый идентификатор связи. Возвращает строковый CODE связанной записи по имени связи.
@@ -638,6 +696,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="getlinks"></a>
 
@@ -659,6 +719,8 @@ function GetLinks(Journal, Code: String; MaxRows: Integer): Variant
 
 ## Описание
 
+Список связей.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает связи записи. Возвращает список связей записи (`MaxRows` ограничивает выборку).
@@ -675,6 +737,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="deletelinks"></a>
 
@@ -696,6 +760,8 @@ procedure DeleteLinks(Journal, Code, Link: String)
 
 ## Описание
 
+Удаление связей.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Удаляет связи записи. Удаляет связи записи **с** триггерами; семантика пустых Code/Link — как у `DeleteLinksNT` (ScriptsJournal).
@@ -714,6 +780,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="undeletelinks"></a>
 
@@ -735,6 +803,8 @@ procedure UnDeleteLinks(Journal, Code, Link: String)
 
 ## Описание
 
+Восстановление связей.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Восстанавливает удалённые связи. Восстанавливает удалённые связи записи (с триггерами).
@@ -751,6 +821,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="deletelinksnt"></a>
 
@@ -772,6 +844,8 @@ procedure DeleteLinksNT(Journal, Code, Link: String)
 
 ## Описание
 
+Удаление связей без триггеров.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Удаляет связи без запуска триггеров. Удаление связей без триггеров (ScriptsJournal). `DeleteLinksNT(J, CODE, '')` — все исходящие с записи; `DeleteLinksNT(J, '', CODE)` — все входящие на запись; оба аргумента заданы — одна пара.
@@ -790,6 +864,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="undeletelinksnt"></a>
 
@@ -811,6 +887,8 @@ procedure UnDeleteLinksNT(Journal, Code, Link: String)
 
 ## Описание
 
+Восстановление связей без триггеров.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Восстанавливает связи без запуска триггеров. Восстановление связей без запуска триггеров.
@@ -827,6 +905,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="asyncsetrecord"></a>
 
@@ -846,6 +926,8 @@ procedure AsyncSetRecord(Journal: String; Doc: Variant)
 | `Doc` | `Variant` | документ для асинхронного сохранения с триггерами (ScriptsJournal) |
 
 ## Описание
+
+Асинхронное сохранение записи.
 
 _Процедура ничего не возвращает._
 
@@ -867,6 +949,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
 
+---
+
 <a id="asyncsetrecordnt"></a>
 
 # `AsyncSetRecordNT` — Асинхронное сохранение без триггеров
@@ -886,6 +970,8 @@ procedure AsyncSetRecordNT(Journal: String; Doc: Variant)
 
 ## Описание
 
+Асинхронное сохранение без триггеров.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Асинхронное сохранение без запуска триггеров. Асинхронное сохранение без триггеров — массовые правки пары отвесов без рекурсии (ScriptsJournal).
@@ -904,6 +990,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="asyncexecproc"></a>
 
@@ -925,6 +1013,8 @@ procedure AsyncExecProc(Journal, Name: String; Args: Variant)
 
 ## Описание
 
+Асинхронный вызов процедуры.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Ставит выполнение хранимой процедуры в очередь. Асинхронный вызов хранимой процедуры (не блокирует `OnAfterUpdate`, ScriptsJournal).
@@ -943,6 +1033,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+
+---
 
 <a id="asyncsetlink"></a>
 
@@ -968,6 +1060,8 @@ procedure AsyncSetLink(Journal, Code, Name, Caption, LinkJournal, LinkType, Link
 
 ## Описание
 
+Асинхронное создание связи.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Ставит создание связи в очередь сообщений. Асинхронное создание связи с триггерами; аргументы как у `AsyncSetLinkNT` (ScriptsJournal).
@@ -986,6 +1080,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="asyncsetlinknt"></a>
 
@@ -1011,6 +1107,8 @@ procedure AsyncSetLinkNT(Journal, Code, Name, Caption, LinkJournal, LinkType, Li
 
 ## Описание
 
+Асинхронная связь без триггеров.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Асинхронное создание связи без триггеров. Асинхронное создание связи без триггеров (ScriptsJournal `Proc_SetSlaveDoc`).
@@ -1028,3 +1126,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/Скрипты/ScriptsJournal`
+
+---

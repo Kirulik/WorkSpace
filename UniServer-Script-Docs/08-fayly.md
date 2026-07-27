@@ -20,6 +20,8 @@ function StringFromFile(FileName: String): String
 
 ## Описание
 
+Чтение текста из файла.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Относительный путь разрешается относительно `MyPath`.
@@ -40,6 +42,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="filefromstring"></a>
 
 # `FileFromString` — Запись текста в файл
@@ -59,6 +63,8 @@ procedure FileFromString(Content: String; FileName: String)
 
 ## Описание
 
+Запись текста в файл.
+
 _Процедура ничего не возвращает._
 
 > **Особенности:** Относительный путь разрешается относительно `MyPath`.
@@ -75,3 +81,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---

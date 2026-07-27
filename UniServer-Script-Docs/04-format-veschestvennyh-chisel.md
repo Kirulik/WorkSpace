@@ -21,6 +21,8 @@ function SetFormatPrecision(Value: Double; Precision: Integer): Double
 
 ## Описание
 
+Округление по точности.
+
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Вычисляет `round(Value * 10^Precision) / 10^Precision`. Округление `round(Value * 10^Precision) / 10^Precision` (fsCommon). В весовых Scripts* любое значение массы перед записью в Result_* / журнал пропускают через `SetFormatPrecision(..., Massa_Precision)`.
@@ -42,6 +44,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
+---
+
 <a id="setformatroundfromdiscret"></a>
 
 # `SetFormatRoundFromDiscret` — Округление по дискрету
@@ -62,6 +66,8 @@ function SetFormatRoundFromDiscret(Value: double; Precision: integer; Discret: d
 
 ## Описание
 
+Округление по дискрету.
+
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Если `Discret < 0.00000001`, он заменяется на `0.00000001`. Вычисляет `SetFormatPrecision(round(Value / Discret) * Discret, Precision)`.
@@ -78,3 +84,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---

@@ -20,6 +20,8 @@ function GetConfigValue(Name: String): Variant
 
 ## Описание
 
+Прочитать значение параметра настройки по наименованию.
+
 значение параметра настройки (по примеру в `functions.txt`)
 
 > **Особенности:** Читает конфигурацию по имени.
@@ -40,6 +42,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/functions.txt`; `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="getconfigfloatdef"></a>
 
 # `GetConfigFloatDef` — Чтение `Double` с значением по умолчанию
@@ -58,6 +62,8 @@ function GetConfigFloatDef(Name: String; ADefValue: Double): Double
 | `ADefValue` | `Double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Чтение `Double` с значением по умолчанию.
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
@@ -79,6 +85,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="getconfigintdef"></a>
 
 # `GetConfigIntDef` — Чтение `Integer` с значением по умолчанию
@@ -97,6 +105,8 @@ function GetConfigIntDef(Name: String; ADefValue: Integer): Integer
 | `ADefValue` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Чтение `Integer` с значением по умолчанию.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -118,6 +128,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="getconfigbooldef"></a>
 
 # `GetConfigBoolDef` — Чтение `Boolean` с значением по умолчанию
@@ -136,6 +148,8 @@ function GetConfigBoolDef(Name: String; ADefValue: Boolean): Boolean
 | `ADefValue` | `Boolean` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Чтение `Boolean` с значением по умолчанию.
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
@@ -156,3 +170,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCoreScript.pas`
+
+---

@@ -20,6 +20,8 @@ function ByteToHex(Value: Byte): String
 
 ## Описание
 
+Byte в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает hex-строку фиксированной ширины 2 символа.
@@ -36,6 +38,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="wordtohex"></a>
 
@@ -55,6 +59,8 @@ function WordToHex(Value: Word): String
 
 ## Описание
 
+Word в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает hex-строку фиксированной ширины 4 символа.
@@ -71,6 +77,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="inttohex"></a>
 
@@ -90,6 +98,8 @@ function IntToHex(Value: Integer): String
 
 ## Описание
 
+Integer в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает hex-строку фиксированной ширины 8 символов.
@@ -106,6 +116,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="int64tohex"></a>
 
@@ -125,6 +137,8 @@ function Int64ToHex(Value: Int64): String
 
 ## Описание
 
+Int64 в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Возвращает hex-строку фиксированной ширины 16 символов.
@@ -141,6 +155,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="doubletohex"></a>
 
@@ -160,6 +176,8 @@ function DoubleToHex(Value: Double): String
 
 ## Описание
 
+Double в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует `Double` в hex-строку.
@@ -176,6 +194,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="singletohex"></a>
 
@@ -195,6 +215,8 @@ function SingleToHex(Value: Single): String
 
 ## Описание
 
+Single в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует `Single` в hex-строку.
@@ -211,6 +233,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextobyte"></a>
 
@@ -230,6 +254,8 @@ function HexToByte(Value: String): byte
 
 ## Описание
 
+Hex в Byte.
+
 Значение типа `byte` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в `Byte`.
@@ -246,6 +272,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextoword"></a>
 
@@ -265,6 +293,8 @@ function HexToWord(Value: String): Integer
 
 ## Описание
 
+Hex в Word.
+
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в целое (Word/Integer по RTTI).
@@ -281,6 +311,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextolongword"></a>
 
@@ -300,6 +332,8 @@ function HexToLongWord(Value: String): Word
 
 ## Описание
 
+Hex в LongWord.
+
 Значение типа `Word` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в LongWord (сигнатура RTTI: Word).
@@ -316,6 +350,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextoint"></a>
 
@@ -335,6 +371,8 @@ function HexToInt(Value: String): Integer
 
 ## Описание
 
+Hex в Integer.
+
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в `Integer`.
@@ -351,6 +389,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextoint64"></a>
 
@@ -370,6 +410,8 @@ function HexToInt64(Value: String): Int64
 
 ## Описание
 
+Hex в Int64.
+
 Значение типа `Int64` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в `Int64`.
@@ -386,6 +428,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextodouble"></a>
 
@@ -405,6 +449,8 @@ function HexToDouble(Value: String): Double
 
 ## Описание
 
+Hex в Double.
+
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в `Double`.
@@ -421,6 +467,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextosingle"></a>
 
@@ -440,6 +488,8 @@ function HexToSingle(Value: String): Single
 
 ## Описание
 
+Hex в Single.
+
 Значение типа `Single` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует hex-строку в `Single`.
@@ -456,6 +506,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="strtohex"></a>
 
@@ -476,6 +528,8 @@ function StrToHex(S: String; CodePage: Integer): String
 
 ## Описание
 
+Преобразование строки в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Для заданной кодовой страницы используется `TSynAnsiConvert`.
@@ -492,6 +546,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextostr"></a>
 
@@ -512,6 +568,8 @@ function HexToStr(Value: String; CodePage: Integer): String
 
 ## Описание
 
+Преобразование hex в строку.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Для заданной кодовой страницы используется `TSynAnsiConvert`.
@@ -528,3 +586,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---

@@ -21,6 +21,8 @@ function NewMessage(MsgName: String; Value: Variant): Variant
 
 ## Описание
 
+Создание сообщения.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Имя сообщения имеет вид `ИмяПлагина.ИмяСообщения`.
@@ -39,6 +41,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+
+---
 
 <a id="newmessageex"></a>
 
@@ -62,6 +66,8 @@ function NewMessageEx(MsgName: String; Value: Variant; Blob, CurrentUser: Varian
 
 ## Описание
 
+Создание расширенного сообщения.
+
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Имя сообщения имеет вид `ИмяПлагина.ИмяСообщения`.
@@ -82,6 +88,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
 
+---
+
 <a id="postmsg"></a>
 
 # `PostMsg` — Асинхронная отправка сообщения
@@ -100,6 +108,8 @@ function PostMsg(Msg: Variant): Boolean
 
 ## Описание
 
+Асинхронная отправка сообщения.
+
 по PluginAPI_desc.odt для интерфейса ядра PostMsg возвращает WordBool/False при отсутствии обработчиков; в глобальной RTTI-процедуре `procedure PostMsg` возвращаемого значения нет
 
 > **Особенности:** Постановка в очередь выполняется асинхронно; возвращает `False`, если обработчиков нет. Асинхронная постановка в очередь; в Scripts* — FixPhoto, SaveRecord, Enable (fire-and-forget). Глобальная RTTI-процедура `procedure PostMsg` не возвращает значение (в отличие от `TICoreMessages.PostMsg`).
@@ -116,6 +126,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/Скрипты/ScriptsAutoControl`
+
+---
 
 <a id="sendmsg"></a>
 
@@ -135,6 +147,8 @@ function SendMsg(Msg: Variant; Timeout: Integer): Variant
 | `Timeout` | `Integer` | таймаут ожидания в миллисекундах; `-1` — бесконечное ожидание (по PluginAPI_desc.odt) |
 
 ## Описание
+
+Синхронная отправка сообщения.
 
 результат обработки (поле Result сообщения) после ожидания до Timeout (по PluginAPI_desc.odt)
 
@@ -157,3 +171,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/PluginAPI_desc.txt`; `Материалы для документации/Скрипты/ScriptsAutoControl`
+
+---

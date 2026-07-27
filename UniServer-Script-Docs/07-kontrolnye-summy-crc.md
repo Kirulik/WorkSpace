@@ -23,6 +23,8 @@ function HexToCRC8SumMod2(SourceStr: String; AIndex, Count: integer; FirstByte: 
 
 ## Описание
 
+CRC8 в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
@@ -39,6 +41,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextocrc8sum"></a>
 
@@ -61,6 +65,8 @@ function HexToCRC8Sum(SourceStr: String; AIndex, ACount: integer; FirstByte: byt
 
 ## Описание
 
+CRC8 в hex.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
@@ -77,6 +83,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextocrc8polinom"></a>
 
@@ -102,6 +110,8 @@ function HexToCRC8Polinom(SourceStr: String; AIndex, ACount: integer; Poly, Init
 
 ## Описание
 
+CRC8 по полиному.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Результат CRC8 представлен hex-строкой из 2 символов.
@@ -119,6 +129,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="hextocrc16polinom"></a>
 
@@ -144,6 +156,8 @@ function HexToCRC16Polinom(SourceStr: String; AIndex, ACount: integer; Poly, Ini
 
 ## Описание
 
+CRC16 по полиному.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Результат CRC16 представлен hex-строкой из 4 символов.
@@ -161,3 +175,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---

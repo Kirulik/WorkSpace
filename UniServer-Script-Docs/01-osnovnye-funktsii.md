@@ -21,6 +21,8 @@ function _ToStr(V: Variant; Format: Boolean = False): String
 
 ## Описание
 
+Преобразование значения в строку.
+
 строковое представление значения; для JSON — JSON-текст (по EventScript_desc.odt / `fsCommon.pas`)
 
 > **Особенности:** Для JSON-объекта или JSON-массива возвращает его текстовое представление. При `Format = True` применяет `JsonReformat`. Для даты формирует ISO 8601 с разделителем `T` и миллисекундами.
@@ -44,6 +46,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="todouble"></a>
 
 # `ToDouble` — Преобразование в `Double`
@@ -61,6 +65,8 @@ function ToDouble(V: Variant): Double
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Преобразование в `Double`.
 
 Значение типа `Double` (тип подтверждён сигнатурой RTTI).
 
@@ -82,6 +88,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="newpackedguid"></a>
 
 # `NewPackedGuid` — Создание packed GUID
@@ -97,6 +105,8 @@ function NewPackedGuid: String
 _Параметры отсутствуют._
 
 ## Описание
+
+Создание packed GUID.
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
@@ -115,6 +125,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsBunkerScale`; `Материалы для документации/Скрипты/ScriptsCraneScale`
 
+---
+
 <a id="ispackedguid"></a>
 
 # `IsPackedGuid` — Проверка packed GUID
@@ -132,6 +144,8 @@ function IsPackedGuid(Guid: String): Boolean
 | `Guid` | `String` | проверяемая строка |
 
 ## Описание
+
+Проверка packed GUID.
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
@@ -152,6 +166,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`; `Материалы для документации/Скрипты/ScriptsJournal`
 
+---
+
 <a id="sleep"></a>
 
 # `Sleep` — Приостановка выполнения
@@ -169,6 +185,8 @@ procedure Sleep(Milliseconds: Integer)
 | `Milliseconds` | `Integer` | длительность паузы в миллисекундах; по `fsCommon.pas` ограничивается диапазоном 0…10000 |
 
 ## Описание
+
+Приостановка выполнения.
 
 _Процедура ничего не возвращает._
 
@@ -188,6 +206,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="isempty"></a>
 
 # `IsEmpty` — Проверка пустого значения
@@ -205,6 +225,8 @@ function IsEmpty(V: Variant): Boolean
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Проверка пустого значения.
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
@@ -227,6 +249,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="varisemptyornull"></a>
 
 # `VarIsEmptyOrNull` — Проверка Empty или Null
@@ -244,6 +268,8 @@ function VarIsEmptyOrNull(V: Variant): Boolean
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Проверка Empty или Null.
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
@@ -265,6 +291,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="debuglog"></a>
 
 # `DebugLog` — Вывод строки в лог файл плагина
@@ -282,6 +310,8 @@ procedure DebugLog(V: Variant)
 | `V` | `Variant` | параметр для вывода в лог файл (по примеру в `functions.txt`) |
 
 ## Описание
+
+Вывод строки в лог файл плагина.
 
 Процедура ничего не возвращает. (по примеру в `functions.txt` блок «Возвращает:» пуст)
 
@@ -302,3 +332,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/functions.txt`; `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCoreScript.pas`
+
+---

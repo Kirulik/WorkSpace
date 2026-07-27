@@ -20,6 +20,8 @@ function QuotedStrJSON(S: String): String
 
 ## Описание
 
+Строка в кавычках JSON.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Заключает строку в JSON-кавычки.
@@ -36,6 +38,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="escapejson"></a>
 
@@ -55,6 +59,8 @@ function EscapeJSON(S: String): String
 
 ## Описание
 
+Экранирование JSON.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Экранирует спецсимволы для JSON-строки.
@@ -72,6 +78,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="arr"></a>
 
 # `_Arr` — Создание JSON-массива
@@ -87,6 +95,8 @@ function _Arr: Variant
 _Параметры отсутствуют._
 
 ## Описание
+
+Создание JSON-массива.
 
 переменная для хранения JSON-массива (по EventScript_desc.odt)
 
@@ -109,6 +119,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="arrex"></a>
 
 # `_ArrEx` — Создание JSON-массива со значениями
@@ -126,6 +138,8 @@ function _ArrEx(A: array of Variant): Variant
 | `A` | `array of Variant` | массив начальных значений для JSON-массива (по EventScript_desc.odt) |
 
 ## Описание
+
+Создание JSON-массива со значениями.
 
 JSON-массив с добавленными значениями (по EventScript_desc.odt)
 
@@ -147,6 +161,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="obj"></a>
 
 # `_Obj` — Создание JSON-объекта
@@ -162,6 +178,8 @@ function _Obj: Variant
 _Параметры отсутствуют._
 
 ## Описание
+
+Создание JSON-объекта.
 
 переменная для хранения JSON-объекта (по EventScript_desc.odt)
 
@@ -184,6 +202,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="objex"></a>
 
 # `_ObjEx` — Создание JSON-объекта с парами
@@ -201,6 +221,8 @@ function _ObjEx(A: array of Variant): Variant
 | `A` | `array of Variant` | пары имя–значение для JSON-объекта (по EventScript_desc.odt) |
 
 ## Описание
+
+Создание JSON-объекта с парами.
 
 JSON-объект с переданными парами имя–значение (по EventScript_desc.odt)
 
@@ -222,6 +244,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="json"></a>
 
 # `_Json` — Разбор JSON-строки
@@ -239,6 +263,8 @@ function _Json(S: String): Variant
 | `S` | `String` | строка описания массива или объекта JSON (по EventScript_desc.odt) |
 
 ## Описание
+
+Разбор JSON-строки.
 
 JSON-объект или JSON-массив, созданный из строки (по EventScript_desc.odt)
 
@@ -260,6 +286,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="copy"></a>
 
 # `_Copy` — Копирование значения
@@ -277,6 +305,8 @@ function _Copy(V: Variant): Variant
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Копирование значения.
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
@@ -299,6 +329,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 ## `JSON-объект / JSON-массив`: свойства и методы
 
 <a id="json-json-kind"></a>
@@ -316,6 +348,8 @@ property _Kind: TDocVariantKind
 _Параметры отсутствуют._
 
 ## Описание
+
+Тип JSON-переменной.
 
 Значение типа `TDocVariantKind` (тип подтверждён сигнатурой RTTI).
 
@@ -335,6 +369,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-count"></a>
 
 # `_Count` — Количество элементов
@@ -350,6 +386,8 @@ property _Count: Integer
 _Параметры отсутствуют._
 
 ## Описание
+
+Количество элементов.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -369,6 +407,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-name"></a>
 
 # `Name` — Имя элемента объекта
@@ -386,6 +426,8 @@ function Name(Idx: Integer): String
 | `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Имя элемента объекта.
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
@@ -407,6 +449,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-value"></a>
 
 # `Value` — Значение элемента
@@ -424,6 +468,8 @@ function Value(Idx: Integer): Variant
 | `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Значение элемента.
 
 Значение типа `Variant` (тип подтверждён сигнатурой RTTI).
 
@@ -445,6 +491,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-exists"></a>
 
 # `Exists` — Проверка существования
@@ -462,6 +510,8 @@ function Exists(Name: String): Boolean
 | `Name` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Проверка существования.
 
 Значение типа `Boolean` (тип подтверждён сигнатурой RTTI).
 
@@ -483,6 +533,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-add"></a>
 
 # `Add` — Добавление в массив
@@ -500,6 +552,8 @@ function Add(V: Variant): Integer
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Добавление в массив.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -521,6 +575,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-addvalue"></a>
 
 # `AddValue` — Добавление в объект
@@ -539,6 +595,8 @@ function AddValue(Name: String; V: Variant): Integer
 | `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Добавление в объект.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -560,6 +618,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-delete"></a>
 
 # `Delete` — Удаление элемента
@@ -577,6 +637,8 @@ procedure Delete(Idx: Integer)
 | `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Удаление элемента.
 
 _Процедура ничего не возвращает._
 
@@ -596,6 +658,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
+---
+
 <a id="json-json-tostring"></a>
 
 # `ToString` — Преобразование в строку
@@ -611,6 +675,8 @@ function ToString: String
 _Параметры отсутствуют._
 
 ## Описание
+
+Преобразование в строку.
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
@@ -631,3 +697,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
+
+---

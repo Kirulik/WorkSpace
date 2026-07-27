@@ -20,6 +20,8 @@ function Iso8601ToDateTime(S: String): TDateTime
 
 ## Описание
 
+Разбор ISO 8601.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует строку даты и времени формата ISO 8601 в `TDateTime`.
@@ -39,6 +41,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="datetimetoiso8601"></a>
 
 # `DateTimeToIso8601` — Форматирование ISO 8601
@@ -56,6 +60,8 @@ function DateTimeToIso8601(D: TDateTime): String
 | `D` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Форматирование ISO 8601.
 
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
@@ -79,6 +85,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="secondsbetween"></a>
 
 # `SecondsBetween` — Разница в секундах
@@ -97,6 +105,8 @@ function SecondsBetween(Now, Then: TDateTime): Integer
 | `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Разница в секундах.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -118,6 +128,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="millisecondsbetween"></a>
 
 # `MillisecondsBetween` — Разница в миллисекундах
@@ -136,6 +148,8 @@ function MillisecondsBetween(Now, Then: TDateTime): Integer
 | `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Разница в миллисекундах.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -157,6 +171,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="minutesbetween"></a>
 
 # `MinutesBetween` — Разница в минутах
@@ -175,6 +191,8 @@ function MinutesBetween(Now, Then: TDateTime): Integer
 | `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Разница в минутах.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -196,6 +214,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="hoursbetween"></a>
 
 # `HoursBetween` — Разница в часах
@@ -214,6 +234,8 @@ function HoursBetween(Now, Then: TDateTime): Integer
 | `Then` | `TDateTime` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
 
 ## Описание
+
+Разница в часах.
 
 Значение типа `Integer` (тип подтверждён сигнатурой RTTI).
 
@@ -235,6 +257,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="nowprecise"></a>
 
 # `NowPrecise` — Текущее локальное время
@@ -250,6 +274,8 @@ function NowPrecise: TDateTime
 _Параметры отсутствуют._
 
 ## Описание
+
+Текущее локальное время.
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
@@ -268,6 +294,8 @@ end
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
 
+---
+
 <a id="nowutcprecise"></a>
 
 # `NowUTCPrecise` — Текущее время UTC
@@ -283,6 +311,8 @@ function NowUTCPrecise: TDateTime
 _Параметры отсутствуют._
 
 ## Описание
+
+Текущее время UTC.
 
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
@@ -300,6 +330,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="inchour"></a>
 
@@ -320,6 +352,8 @@ function IncHour(const Value: TDateTime; const NumberOfHours: Integer): TDateTim
 
 ## Описание
 
+Увеличение часов.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Сдвигает `TDateTime` на заданное число часов.
@@ -336,6 +370,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="incday"></a>
 
@@ -356,6 +392,8 @@ function IncDay(const Value: TDateTime; const NumberOfDays: Integer): TDateTime
 
 ## Описание
 
+Увеличение дней.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Сдвигает `TDateTime` на заданное число дней.
@@ -372,6 +410,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="incminute"></a>
 
@@ -392,6 +432,8 @@ function IncMinute(const Value: TDateTime; const NumberOfDays: Integer): TDateTi
 
 ## Описание
 
+Увеличение минут.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMinute`.
@@ -408,6 +450,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="incsecond"></a>
 
@@ -428,6 +472,8 @@ function IncSecond(const Value: TDateTime; const NumberOfDays: Integer): TDateTi
 
 ## Описание
 
+Увеличение секунд.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncSecond`.
@@ -444,6 +490,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="incmillisecond"></a>
 
@@ -464,6 +512,8 @@ function IncMilliSecond(const Value: TDateTime; const NumberOfDays: Integer): TD
 
 ## Описание
 
+Увеличение миллисекунд.
+
 Значение типа `TDateTime` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Несмотря на имя RTTI-параметра `NumberOfDays`, реализация вызывает `DateUtils.IncMilliSecond`.
@@ -480,6 +530,8 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
 
 <a id="ticksperiodtotext"></a>
 
@@ -499,6 +551,8 @@ function TicksPeriodToText(const ATicks: Integer): String
 
 ## Описание
 
+Период тиков в текст.
+
 Значение типа `String` (тип подтверждён сигнатурой RTTI).
 
 > **Особенности:** Преобразует период в тиках в текстовое представление.
@@ -515,3 +569,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
+
+---
