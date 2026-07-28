@@ -16,7 +16,7 @@ function ByteToHex(Value: Byte): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Byte` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Byte` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -53,7 +53,7 @@ function WordToHex(Value: Word): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Word` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Word` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -90,7 +90,7 @@ function IntToHex(Value: Integer): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -127,7 +127,7 @@ function Int64ToHex(Value: Int64): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Int64` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Int64` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -164,7 +164,7 @@ function DoubleToHex(Value: Double): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Double` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -201,7 +201,7 @@ function SingleToHex(Value: Single): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `Single` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `Single` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -238,7 +238,7 @@ function HexToByte(Value: String): byte
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -275,7 +275,7 @@ function HexToWord(Value: String): Integer
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -312,7 +312,7 @@ function HexToLongWord(Value: String): Word
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -349,7 +349,7 @@ function HexToInt(Value: String): Integer
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -386,7 +386,7 @@ function HexToInt64(Value: String): Int64
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -423,7 +423,7 @@ function HexToDouble(Value: String): Double
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -460,7 +460,7 @@ function HexToSingle(Value: String): Single
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -497,8 +497,8 @@ function StrToHex(S: String; CodePage: Integer): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-| `CodePage` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
+| `CodePage` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -535,8 +535,8 @@ function HexToStr(Value: String; CodePage: Integer): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-| `CodePage` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `Value` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
+| `CodePage` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 

@@ -51,15 +51,6 @@ python Документация/_build_help.py
 - [`_ObjEx`](UniServer-Script-Docs/02-json-obekty.md#objex) - Создание JSON-объекта с парами
 - [`_Json`](UniServer-Script-Docs/02-json-obekty.md#json) - Разбор JSON-строки
 - [`_Copy`](UniServer-Script-Docs/02-json-obekty.md#copy) - Копирование значения
-- [`_Kind`](UniServer-Script-Docs/02-json-obekty.md#json-json-kind) - Тип JSON-переменной
-- [`_Count`](UniServer-Script-Docs/02-json-obekty.md#json-json-count) - Количество элементов
-- [`Name`](UniServer-Script-Docs/02-json-obekty.md#json-json-name) - Имя элемента объекта
-- [`Value`](UniServer-Script-Docs/02-json-obekty.md#json-json-value) - Значение элемента
-- [`Exists`](UniServer-Script-Docs/02-json-obekty.md#json-json-exists) - Проверка существования
-- [`Add`](UniServer-Script-Docs/02-json-obekty.md#json-json-add) - Добавление в массив
-- [`AddValue`](UniServer-Script-Docs/02-json-obekty.md#json-json-addvalue) - Добавление в объект
-- [`Delete`](UniServer-Script-Docs/02-json-obekty.md#json-json-delete) - Удаление элемента
-- [`ToString`](UniServer-Script-Docs/02-json-obekty.md#json-json-tostring) - Преобразование в строку
 
 </details>
 
@@ -209,6 +200,44 @@ python Документация/_build_help.py
 <details>
 <summary>Конструктор. Переменные среды, дополнительные функции</summary>
 
+- [`CoreConfig`](UniServer-Script-Docs/13-konstruktor-sreda.md#coreconfig) — Конфигурация и пути сервера
+  - [`CoreConfig.BinPath`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-binpath) - Каталог двоичных файлов сервера
+  - [`CoreConfig.DataPath`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-datapath) - Каталог данных сервера
+  - [`CoreConfig.Defaults`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-defaults) - Значение конфигурации по умолчанию
+  - [`CoreConfig.LogPath`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-logpath) - Каталог журналов
+  - [`CoreConfig.LogVerbose`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-logverbose) - Подробный режим логирования
+  - [`CoreConfig.MsgForType`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-msgfortype) - Имя сообщения по типу содержимого
+  - [`CoreConfig.MsgInfo`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-msginfo) - Описание сообщения
+  - [`CoreConfig.MsgInfos`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-msginfos) - Сводная информация о сообщениях
+  - [`CoreConfig.MsgNames`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-msgnames) - Имена сообщений
+  - [`CoreConfig.MyPath`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-mypath) - Каталог текущего плагина
+  - [`CoreConfig.PluginOptsDocJson`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-pluginoptsdocjson) - JSON-описание опций плагина
+  - [`CoreConfig.PluginPath`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-pluginpath) - Каталог плагинов
+  - [`CoreConfig.Roles`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-roles) - Роли сервера
+  - [`CoreConfig.ServerAddr`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-serveraddr) - Адрес сервера
+  - [`CoreConfig.ServerPort`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-serverport) - Порт сервера
+  - [`CoreConfig.URL`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-url) - Базовый URL сервера
+  - [`CoreConfig.Values`](UniServer-Script-Docs/13-konstruktor-sreda.md#ticoreconfig-values) - Значение параметра конфигурации
+- [`Request`](UniServer-Script-Docs/13-konstruktor-sreda.md#request) — HTTP-запрос страницы плагина
+  - [`Request.Cookie`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-cookie) - Cookie запроса
+  - [`Request.Header`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-header) - Заголовок запроса
+  - [`Request.Input`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-input) - Параметр запроса
+  - [`Request.InputArr`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-inputarr) - Параметр-массив
+  - [`Request.InputStr`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-inputstr) - Строковый параметр
+  - [`Request.ToJson`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-tojson) - JSON запроса
+  - [`Request.CurrentUser`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-currentuser) - Текущий пользователь
+  - [`Request.Method`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-method) - HTTP-метод
+  - [`Request.Page`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-page) - Имя страницы
+  - [`Request.URI`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverrequest-uri) - URI запроса
+- [`Response`](UniServer-Script-Docs/13-konstruktor-sreda.md#response) — HTTP-ответ страницы плагина
+  - [`Response.Redirect`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-redirect) - Перенаправление
+  - [`Response.ReturnBlob`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-returnblob) - Двоичный ответ
+  - [`Response.ReturnError`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-returnerror) - Страница ошибки
+  - [`Response.ReturnPage`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-returnpage) - Ответ HTML-страницей
+  - [`Response.ReturnText`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-returntext) - Текстовый HTTP-ответ
+  - [`Response.SetCookie`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-setcookie) - Установка cookie
+  - [`Response.SetHeader`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-setheader) - Установка заголовка
+  - [`Response.CacheControl`](UniServer-Script-Docs/13-konstruktor-sreda.md#tiwebserverresponse-cachecontrol) - Флаги кэширования ответа
 - [`GetVarValue`](UniServer-Script-Docs/13-konstruktor-sreda.md#getvarvalue) - Чтение глобальной переменной
 - [`SetVarValue`](UniServer-Script-Docs/13-konstruktor-sreda.md#setvarvalue) - Запись глобальной переменной
 

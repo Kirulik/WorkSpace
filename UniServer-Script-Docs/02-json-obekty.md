@@ -1,6 +1,35 @@
 # JSON объекты
 
-JSON — основной структурный формат данных в скриптах UniServer. Сообщения несут `Value` типа `Variant`, часто как JSON-объект; фильтры `GetRecords`, документы `SetRecord`, параметры `ReturnPage` и ответы страниц данных собираются через `_Obj` / `_Arr` / `_Json`. Функции `_ArrEx` / `_ObjEx` создают структуру сразу со значениями; `_Copy` копирует JSON через строковое представление. `QuotedStrJSON` и `EscapeJSON` готовят безопасные фрагменты для ручной сборки JSON-текста. После создания объекта доступны свойства и методы (`_Kind`, `_Count`, `AddValue`, `Exists` и др.). Правило платформы: сначала структура (`_Json` / `_Obj`), затем поля; обратно в текст — `_ToStr` или `ToString`.
+JSON — основной структурный формат данных в скриптах UniServer. Сообщения несут `Value` типа `Variant`, часто как JSON-объект; фильтры `GetRecords`, документы `SetRecord`, параметры `ReturnPage` и ответы страниц данных собираются через `_Obj` / `_Arr` / `_Json`. Функции `_ArrEx` / `_ObjEx` создают структуру сразу со значениями; `_Copy` копирует JSON через строковое представление. `QuotedStrJSON` и `EscapeJSON` готовят безопасные фрагменты для ручной сборки JSON-текста. Правило платформы: сначала структура (`_Json` / `_Obj`), затем поля; обратно в текст — обычно `_ToStr`.
+
+## Структура JSON-объекта и JSON-массива
+
+После `_Obj` / `_Arr` / `_Json` / `_ObjEx` / `_ArrEx` переменная хранит JSON-структуру. Поля объекта часто читают и пишут по имени (`x.ID`, `x.Enabled := True`); для перебора, проверки и изменения коллекции используют члены ниже (по EventScript_desc.odt / `fsJsonVar.pas`).
+
+| Член | Сигнатура | Назначение |
+|------|-----------|------------|
+| `_Kind` | `property _Kind: TDocVariantKind` | тип: `dvObject` или `dvArray` |
+| `_Count` | `property _Count: Integer` | число элементов |
+| `Name` | `function Name(Idx: Integer): String` | имя поля объекта по индексу |
+| `Value` | `function Value(Idx: Integer): Variant` | значение по индексу (массив или объект); также `Value('Field')` / присвоение |
+| `Exists` | `function Exists(Name: String): Boolean` | есть ли имя в объекте (или значение в массиве) |
+| `Add` | `function Add(V: Variant): Integer` | добавить элемент в массив, вернуть индекс |
+| `AddValue` | `function AddValue(Name: String; V: Variant): Integer` | добавить поле в объект, вернуть индекс |
+| `Delete` | `procedure Delete(Idx: Integer)` | удалить элемент по индексу |
+| `ToString` | `function ToString: String` | перевести структуру в строку (в скриптах чаще используют `_ToStr`) |
+
+```pascal
+x := _Obj();
+x.AddValue('ID', 10);
+if x.Exists('ID') then
+  DebugLog(x.Name(0) + '=' + _ToStr(x.Value(0)));
+
+Docs := GetRecords('WeighingJournal', Args);
+Doc := Docs.Value(0);  // элемент JSON-массива
+```
+
+_Источник:_ `EventScript_desc.odt`; `fsJsonVar.pas`; примеры — Scripts* (`Exists`, `Value`, `Name`, `AddValue`).
+
 
 <a id="quotedstrjson"></a>
 
@@ -16,7 +45,7 @@ function QuotedStrJSON(S: String): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -53,7 +82,7 @@ function EscapeJSON(S: String): String
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `S` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -288,7 +317,7 @@ function _Copy(V: Variant): Variant
 
 | Параметр | Тип | Описание |
 |:--|:--|:--|
-| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
+| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ</span> |
 
 ## Описание
 
@@ -312,356 +341,5 @@ end
 </details>
 
 _Источники сведений:_ `Материалы для документации/source/fsCommon.pas`
-
----
-
-## `JSON-объект / JSON-массив`: свойства и методы
-
-<a id="json-json-kind"></a>
-
-# `_Kind` — Тип JSON-переменной
-
-## Синтаксис
-
-```pascal
-property _Kind: TDocVariantKind
-```
-
-## Параметры
-
-_Параметры отсутствуют._
-
-## Описание
-
-Возвращает тип JSON-переменной (`dvObject`, `dvArray` или `dvUndefined`).
-
-> **Особенности:** Возвращает `dvObject` для объекта или `dvArray` для массива.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-begin
-  // Свойство `_Kind` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-count"></a>
-
-# `_Count` — Количество элементов
-
-## Синтаксис
-
-```pascal
-property _Count: Integer
-```
-
-## Параметры
-
-_Параметры отсутствуют._
-
-## Описание
-
-Возвращает число элементов массива или полей объекта.
-
-> **Особенности:** Возвращает количество элементов массива или объекта.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-begin
-  // Свойство `_Count` доступно у соответствующего объекта интерфейса.
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: пример чтения/записи конкретного свойства в материалах отсутствует.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-name"></a>
-
-# `Name` — Имя элемента объекта
-
-## Синтаксис
-
-```pascal
-function Name(Idx: Integer): String
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Возвращает имя поля JSON-объекта по индексу.
-
-> **Особенности:** Возвращает имя значения в объекте по индексу.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := Name(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-value"></a>
-
-# `Value` — Значение элемента
-
-## Синтаксис
-
-```pascal
-function Value(Idx: Integer): Variant
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Возвращает или задаёт значение элемента массива либо поля объекта по индексу.
-
-> **Особенности:** Возвращает или задаёт значение в массиве либо объекте.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := Value(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-exists"></a>
-
-# `Exists` — Проверка существования
-
-## Синтаксис
-
-```pascal
-function Exists(Name: String): Boolean
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `Name` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Возвращает `True`, если поле или значение присутствует в JSON-структуре.
-
-> **Особенности:** Проверяет имя в объекте или значение в массиве.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := Exists(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-add"></a>
-
-# `Add` — Добавление в массив
-
-## Синтаксис
-
-```pascal
-function Add(V: Variant): Integer
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Возвращает индекс добавленного в массив элемента.
-
-> **Особенности:** Добавляет значение в массив и возвращает его индекс.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := Add(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-addvalue"></a>
-
-# `AddValue` — Добавление в объект
-
-## Синтаксис
-
-```pascal
-function AddValue(Name: String; V: Variant): Integer
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `Name` | `String` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-| `V` | `Variant` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Возвращает индекс добавленного в объект поля.
-
-> **Особенности:** Добавляет имя и значение в объект и возвращает индекс.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := AddValue(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-delete"></a>
-
-# `Delete` — Удаление элемента
-
-## Синтаксис
-
-```pascal
-procedure Delete(Idx: Integer)
-```
-
-## Параметры
-
-| Параметр | Тип | Описание |
-|:--|:--|:--|
-| `Idx` | `Integer` | <span style="color:#b00020;font-weight:bold;background:#fff3cd;padding:2px 6px;">⚠ ТРЕБУЕТСЯ ДОПОЛНЕНИЕ:</span> в материалах нет текстового описания назначения этого параметра (есть только тип из RTTI). |
-
-## Описание
-
-Удаляет элемент массива или поле объекта по индексу.
-
-> **Особенности:** Удаляет элемент из массива или объекта.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-begin
-  // Delete(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой процедуры.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
-
----
-
-<a id="json-json-tostring"></a>
-
-# `ToString` — Преобразование в строку
-
-## Синтаксис
-
-```pascal
-function ToString: String
-```
-
-## Параметры
-
-_Параметры отсутствуют._
-
-## Описание
-
-Возвращает текстовое представление JSON-объекта или массива.
-
-> **Особенности:** Преобразует массив или объект в строку.
-
-<details>
-<summary><strong>Пример реализации</strong></summary>
-
-```pascal
-var
-  r: Variant; // результат (тип уточняется сигнатурой)
-begin
-  // r := ToString(...);
-  // > ТРЕБУЕТСЯ ДОПОЛНЕНИЕ: в материалах нет готового примера вызова для этой функции.
-end
-```
-
-</details>
-
-_Источники сведений:_ `Материалы для документации/source/_odt_extract/EventScript_desc.txt`; `Материалы для документации/source/fsJsonVar.pas`
 
 ---
